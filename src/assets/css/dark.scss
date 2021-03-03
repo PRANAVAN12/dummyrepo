@@ -1,0 +1,65 @@
+// Dark Mode
+// Author : SpeedCodeLabs
+
+.theme--dark .v-icon.v-icon,
+.theme--dark .v-list-item__title {
+    color: #b7c0cd !important;
+}
+
+.theme--dark.v-navigation-drawer {
+    background-color: #34444c !important;
+}
+
+.black_bar {
+    // background: linear-gradient(to right, #00c5fb 0%, #0253cc 100%);
+    // background: linear-gradient(to right, #34444c 0%, #0253cc 100%);
+    background: linear-gradient(to right, #34444c 0%, #04183a 59%, #005b88 95%);
+    
+}
+
+.black_bar .v-toolbar__content,
+.v-toolbar__extension {
+    box-shadow: unset;
+}
+
+.theme--dark .brand_name,
+.theme--dark .v-btn--round .v-btn__content .v-icon {
+    color: white !important;
+}
+
+.v-app-bar .v-sheet.v-app-bar.v-toolbar:not(.v-sheet--outlined) {
+    border-bottom: unset !important;
+}
+
+.theme--dark.v-app-bar.v-toolbar.v-sheet {
+    background-color: unset !important;
+}
+
+.theme--dark.v-sheet.v-app-bar.v-toolbar:not(.v-sheet--outlined) {
+    border: unset !important;
+}
+
+.theme--dark .global_search .v-input input:focus {
+    background: #1f4577;
+    color: white
+}
+
+.theme--dark .global_search .v-input input {
+    color: #9ea8b4;
+}
+
+.theme--dark.v-tabs>.v-tabs-bar.tab-light {
+    background-color: #1b3c66 !important;
+    color: white !important;
+}
+
+.theme--dark.v-tabs>.v-tabs-bar .v-tab:not(.v-tab--active),
+.theme--dark.v-tabs>.v-tabs-bar .v-tab:not(.v-tab--active)>.v-icon,
+.theme--dark.v-tabs>.v-tabs-bar .v-tab:not(.v-tab--active)>.v-btn,
+.theme--dark.v-tabs>.v-tabs-bar {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.v-tabs-bar.v-item-group>* {
+    padding: unset !important;
+}
