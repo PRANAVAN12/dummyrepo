@@ -112,14 +112,12 @@ export default {
     },
 
     onStatusChange(value) {
-      debugger;
       if (
         this.statuses.find((s) => s.status == value).requiredNote &&
         this.statusNote == ""
       ) {
         this.statusNoteError.push("Reason is required");
       } else {
-        debugger
         this.selectedStatus=value
       }
     },

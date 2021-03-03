@@ -16,6 +16,7 @@ instance.interceptors.request.use(
   function(config) {
     /* token retrived from - global window Store */
     // const { token } = Store.state
+    
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.common["Authorization"] = "Bearer " + token;
@@ -33,20 +34,20 @@ instance.interceptors.request.use(
   }
 );
 
-instance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    // Redirects to login page when the token expires
-    if (error.response.status == 401) {
-      window.location.href = "/login";
-    } else if (error.response.status == 422) {
-      console.log("this.$store---------------------");
-      console.log(store);
-      store.dispatch("setErrorMessages", error.response.data);
-    }
-    return Promise.reject(error);
-  }
-);
+// instance.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     // Redirects to login page when the token expires
+//     if (error.response.status == 401) {
+//       window.location.href = "/login";
+//     } else if (error.response.status == 422) {
+//       console.log("this.$store---------------------");
+//       console.log(store);
+//       store.dispatch("setErrorMessages", error.response.data);
+//     }
+//     return Promise.reject(error);
+//   }
+// );
 
 export default {
   get(action, params = {}) {

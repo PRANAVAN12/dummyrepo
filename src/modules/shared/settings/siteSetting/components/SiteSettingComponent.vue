@@ -590,7 +590,7 @@ export default {
       this.$store
         .dispatch("sitesetting/EditSiteSetting", credentials)
         .then( (res) => {
-          debugger
+          
           this.succeeed = true;
         
            this.UploadSitelogo()
@@ -650,7 +650,7 @@ export default {
         });
     },
     async UploadSitelogo() {
-      debugger
+      
       let fromData = new FormData();
       if (this.selectedImages && this.imageUpdated) {
         // fromData.append("1", sitesettingId);

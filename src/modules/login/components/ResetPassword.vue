@@ -137,14 +137,12 @@ export default {
       }
     },
     ResetPassword() {
-      debugger;
       if (this.form.password !== this.form.rePassword) {
         this.passwordNotMatchError = "passwords does not match";
       } else {
         this.passwordNotMatchError = null;
       }
       if (this.form.password == this.form.rePassword) {
-        debugger;
         this.loading = true;
         var resetLink = this.$route.query.token;
         this.$store

@@ -1,10 +1,11 @@
 <template>
-  <div class="permission-content" v-if="userHasPermission()">
+  <div class="permission-content" >
     <slot />
   </div>
 </template>
 
 <script>
+//v-if="userHasPermission()"
 import { mapState } from "vuex";
 export default {
   name: "permission-control",

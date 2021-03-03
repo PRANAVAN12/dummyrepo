@@ -1,6 +1,8 @@
 <template>
-  <div v-if="hadData && options.perPage <= noOfRecords">
-    <v-row
+
+  <div >
+    <div v-if="hadData && options.perPage <= noOfRecords">
+ <v-row
       ><v-col cols="4"> <slot name="footer"></slot></v-col>
       <v-col cols="4"> <slot name="footer2"></slot></v-col>
       <v-col cols="4"> <slot name="footer3"></slot></v-col>
@@ -67,6 +69,8 @@
         <!-- Pagination -->
       </v-row>
     </div>
+    </div>
+   
   </div>
 </template>
 
@@ -219,6 +223,7 @@ export default {
       this.fetchData();
     },
     fetchData() {
+      debugger
       this.$store
         .dispatch("GetPaginationData", {
           url: this.url,
@@ -239,8 +244,8 @@ export default {
           // this.Product = new ProductViewModel(res.data);
           // this.Product = res.data;
           if (res.data.meta) {
-            this.noOfRecords = res.data.meta.totalItems;
-            this.options.total = res.data.meta.lastPage;
+            this.noOfRecords = res.data.meta.total;
+            this.options.total = res.data.meta.last_page;
 
             if (res.data.data.length != 0) this.hadData = true;
             else this.hadData = false;

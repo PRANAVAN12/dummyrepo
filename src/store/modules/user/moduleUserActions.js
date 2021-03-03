@@ -12,25 +12,49 @@ import { UserEntityModel } from "@/models/EntityModels/UserEnitityModel";
 import { RoleEntityModel } from "@/models/EntityModels/RoleEntityModel";
 
 export default {
-  async LoginUser({ commit }) {
+  async LoginUsers({ commit }) {
+    
     return new Promise((resolve, reject) => {
+
       axios
         .get("auth/user")
         .then((resp) => {
-          debugger;
           commit("SET_POLICIES", resp.data.permissions);
           commit("SET_USER", resp.data);
-          if (resp.data && resp.data.accessToken) {
-            localStorage.setItem("token", resp.data.accessToken);
-            localStorage.setItem("user", JSON.stringify(resp.data));
-          }
+          setTimeout(function () {
+            commit("SET_LOGIN_STATUS", true);
+          },200)
           resolve(resp);
         })
         .catch((err) => {
+          commit("SET_LOGIN_STATUS", false);
           console.log("Error");
           reject(err.response);
         });
     });
+  },
+
+  async Logins ({ commit }, user) { 
+    let email = user.email
+    let token = user.token
+    
+    return new Promise((resolve, reject) => {
+      axios
+        .post('auth/login', { email: email,
+          token: token})
+        .then((resp) => {
+          if (resp.data && resp.data.accessToken) {
+            
+            localStorage.setItem('token', resp.data.accessToken)
+            localStorage.setItem("user", JSON.stringify(resp.data));
+          }
+          resolve(resp)
+        })
+        .catch((err) => {
+          console.log('Error')
+          reject(err.response)
+        })
+    })
   },
   async LogOut({ commit }) {
     return new Promise((resolve, reject) => {
@@ -44,6 +68,7 @@ export default {
       axios
         .post("auth/login", Credentials)
         .then((resp) => {
+          
           console.log("Request succeeded");
           resolve(resp);
         })
@@ -119,9 +144,12 @@ export default {
 
 
   async EditUser({}, payload) {
+  
+    let userid = payload.id;
+    delete payload.id;
     return new Promise((resolve, reject) => {
       axios
-        .patch(`users/${payload.id}`, new UserEntityModel(payload))
+        .patch(`users/${userid}`, payload)
         .then((resp) => {
           console.log("Request succeeded");
           resolve(resp);
@@ -151,12 +179,10 @@ export default {
     });
   },
   ChangeTempPassword({}, Credentials) {
-    debugger
     return new Promise((resolve, reject) => {
       axios
         .post("auth/changes-temp-password", Credentials)
         .then((resp) => {
-          debugger
           console.log("Request succeeded");
           resolve(resp);
         })
@@ -254,7 +280,7 @@ export default {
       axios
         .get("policies")
         .then((resp) => {
-          resolve(resp);
+          resolve(resp.data);
         })
         .catch((err) => {
           reject(err.response);
@@ -269,11 +295,10 @@ export default {
         .get(`roles/${id}`)
         .then((resp) => {
           // console.log("Request succeeded");
-          debugger;
           commit("SET_BREADCRUMB", resp.data.name, {
             root: true,
           });
-          resolve(resp);
+          resolve(resp.data);
         })
         .catch((err) => {
           console.log("Error");
@@ -320,7 +345,6 @@ export default {
       axios
         .get(url)
         .then((resp) => {
-          debugger
           resolve(resp.data);
         })
         .catch((err) => {

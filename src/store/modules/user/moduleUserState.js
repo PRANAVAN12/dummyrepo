@@ -9,5 +9,8 @@
 
 export default { 
   user:null,
-  policies:[]
+  login_status:false,
+  policies:[],
+  avatar:""
+ 
 }

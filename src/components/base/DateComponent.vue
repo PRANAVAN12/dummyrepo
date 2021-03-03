@@ -20,7 +20,9 @@
         v-on="on"
         clearable
         :disabled="disabled"
+        :error-messages="errors"
       ></v-text-field>
+      
     </template>
     <v-date-picker
       v-model="value"
@@ -57,6 +59,10 @@ export default {
       type: Boolean,
       default: null,
     },
+    errors:{
+      type:Array,
+      default:null
+    }
   },
   data: (vm) => ({
     date: new Date().toISOString().substr(0, 10),

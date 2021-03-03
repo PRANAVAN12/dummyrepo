@@ -15,6 +15,7 @@
                         v-for="msg in messages"
                         :key="msg"
                         class="messages"
+                        
                         dense
                         outlined
                         type="error"
@@ -32,6 +33,7 @@
                       >
                         <v-text-field
                           outlined
+                          hide-details="auto"
                           v-model="role.name"
                           :error-messages="errors"
                           dense
@@ -53,6 +55,7 @@
                           v-model="role.description"
                           :error-messages="errors"
                           dense
+                          hide-details="auto"
                           label="Description"
                           rows="2"
                         ></v-textarea>

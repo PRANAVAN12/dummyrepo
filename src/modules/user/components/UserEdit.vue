@@ -3,234 +3,101 @@
     <PageTitle title="Edit User" :backBtn="true" :showLoading="isLoading" />
     <v-container fluid class="lighten-12 content">
       <v-row>
-        <v-col cols="12" sm="12" md="12" lg="8">
+        <v-col cols="12" sm="12" md="12" lg="12">
           <v-row>
             <v-col>
               <v-card class="lighten-12 card-content mb-1">
+                 <ValidationObserver ref="observer" v-slot="{ validate, reset }">
                 <v-card-title>General</v-card-title>
                 <v-container fluid class="light gray lighten-12">
-                  <!-- <v-overlay v-if="isLoading"></v-overlay> -->
-
-                  <!-- <v-progress-linear
-              active="false"
-              indeterminate="false"
-              :query="false"
-              v-if="isLoading"
-            ></v-progress-linear> -->
-
-                  <ValidationObserver
-                    ref="observer"
-                    v-slot="{ validate, reset }"
-                  >
-                    <form>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="6" lg="6">
+                  <form>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="6" lg="6">
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          vid="user"
+                          name="User"
+                          rules="required"
+                        >
+                          <v-text-field
+                            outlined
+                            dense
+                            v-model="user.name"
+                            :error-messages="errors"
+                            label="User"
+                            hide-details="auto"
+                          ></v-text-field>
+                        </ValidationProvider>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="6" lg="6">
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          name="Email"
+                          vid="name"
+                          rules="required"
+                        >
+                            <v-select
+                            hide-details="auto"
+                            dense
+                            v-model="user.email"
+                            item-text="name"
+                            item-value="id"
+                            :items="Getemails"
+                            :error-messages="errors"
+                            label="Email"
+                            outlined
+                          ></v-select>
+                        </ValidationProvider>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="6" lg="6">
                           <ValidationProvider
                             v-slot="{ errors }"
-                            name="firstName"
-                            vid="first_name"
-                            rules="required"
-                          >
-                            <v-text-field
-                              hide-details="auto"
-                              outlined
-                              dense
-                              v-model="user.firstName"
-                              :error-messages="errors"
-                              label="FirstName"
-                              required
-                            ></v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="6" lg="6">
-                          <ValidationProvider
-                            v-slot="{ errors }"
-                            name="lastName"
-                            vid="last_name"
-                            rules="required"
-                          >
-                            <v-text-field
-                              hide-details="auto"
-                              outlined
-                              dense
-                              v-model="user.lastName"
-                              :error-messages="errors"
-                              label="Last Name"
-                              required
-                            ></v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="6" lg="6">
-                          <ValidationProvider
-                            v-slot="{ errors }"
-                            name="Email"
-                            vid="email"
-                            rules="required|email"
-                          >
-                            <v-text-field
-                              hide-details="auto"
-                              outlined
-                              dense
-                              v-model="user.email"
-                              :error-messages="errors"
-                              label="E-mail"
-                              required
-                            ></v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="6" lg="6">
-                          <ValidationProvider
-                            v-slot="{ errors }"
-                            name="Username"
-                            vid="username"
-                            rules="required"
-                          >
-                            <v-text-field
-                              hide-details="auto"
-                              outlined
-                              dense
-                              disabled
-                              v-model="user.username"
-                              :error-messages="errors"
-                              label="UserName"
-                              required
-                            ></v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" sm="12" md="12" lg="12">
-                          <ValidationProvider
-                            v-slot="{ errors }"
-                            name="Roles"
+                            name="Staff"
                             vid="roles"
                             rules="required"
                           >
                             <v-select
                               hide-details="auto"
                               dense
-                              v-model="user.roles"
-                              item-text="name"
+                              v-model="user.staff_id"
+                              item-text="last_name"
                               item-value="id"
-                              :items="roles"
+                              :items="staffs"
                               :error-messages="errors"
-                              label="Roles"
+                              label="Staff"
                               outlined
                             ></v-select>
                           </ValidationProvider>
                         </v-col>
-                      </v-row>
-                    </form>
-                  </ValidationObserver>
+                      <v-col cols="12" sm="6" md="6" lg="6">
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          name="Role"
+                          vid="roles"
+                          rules="required"
+                        >
+                          <v-select
+                            hide-details="auto"
+                            dense
+                            v-model="user.roles"
+                            item-text="name"
+                            item-value="id"
+                            :items="roles"
+                            :error-messages="errors"
+                            label="Roles"
+                            outlined
+                          ></v-select>
+                        </ValidationProvider>
+                      </v-col>
+                    </v-row>
+                  </form>
                 </v-container>
-              </v-card>
-            </v-col>
-          </v-row>
-          <v-row
-            ><v-col cols="12">
-              <ValidationObserver ref="address" v-slot="{ validate, reset }">
-                <v-card class="lighten-12 card-content">
-                  <v-card-title> Address</v-card-title>
-<v-container>
-                  <AddressComponent
-                    ref="addressComponent"
-                    :address="user.address"
-                  />
-                  </v-container>
-                </v-card>
-              </ValidationObserver>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="12">
-              <v-card class="lighten-12 card-content">
-                <v-card-title> Contacts</v-card-title>
-                <v-container fluid class="light gray lighten-12">
-                  <v-row>
-                    <v-col cols="12" sm="6" md="6" lg="6">
-                      <ValidationProvider
-                        v-slot="{ errors }"
-                        :rules="{ regex: /^[+,-,0-9]*[+,-,0-9]*$/ }"
-                      >
-                        <v-text-field
-                          dense
-                          outlined
-                          v-model="user.contact.telephone"
-                          :error-messages="errors"
-                          maxlength="13"
-                          label="Telephone"
-                          required
-                        ></v-text-field>
-                      </ValidationProvider>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="6" lg="6">
-                      <ValidationProvider
-                        v-slot="{ errors }"
-                        :rules="{ regex: /^[+,-,0-9]*[+,-,0-9]*$/ }"
-                      >
-                        <v-text-field
-                          dense
-                          outlined
-                          v-model="user.contact.phone"
-                          :error-messages="errors"
-                          label="phone"
-                          maxlength="13"
-                          required
-                        ></v-text-field>
-                      </ValidationProvider>
-                    </v-col>
-                  </v-row>
-                </v-container>
+                 </ValidationObserver>
               </v-card>
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="12" sm="12" md="12" lg="4">
-          <v-row>
-            <v-col cols="12">
-              <v-card class="lighten-12">
-                <v-container class="light gray lighten-12">
-                  <v-row>
-                    <v-col cols="12 py-0">
-                      <v-flex class="pt-0 pa-1">
-                        <FileUpload
-                          title="Image"
-                          @isImageUpdated="onChangeImageUpload"
-                          :multiple="false"
-                          v-model="selectedImages"
-                          :externalFiles="user.image ? [user.image] : []"
-                          size="2048"
-                          :types="['jpeg', 'png', 'jpg']"
-                          :showPreview="true"
-                          :camera="true"
-                        />
-                      </v-flex>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card>
-            </v-col> </v-row
-        ></v-col>
       </v-row>
-
-      <!-- Submit -->
-      <!-- <v-col offset="9">
-        <v-btn
-          depressed
-          small
-          class="text-white btn_blue btn_medium w-100"
-          :disabled="isSubmitDisabled"
-          @click="submit"
-          >submit</v-btn
-        >
-        <v-btn depressed small @click="clear" class="ml-1 text-white btn_medium"
-          >clear</v-btn
-        >
-      </v-col> -->
-
       <v-row>
         <v-col cols="12" sm="12" md="6" lg="12" class="content-flex-end">
           <btn-cancel></btn-cancel>
@@ -244,7 +111,6 @@
           >
         </v-col>
       </v-row>
-      <!-- <ChangePassword :username="user.username" /> -->
     </v-container>
   </div>
 </template>
@@ -255,10 +121,9 @@ import jwt_decode from "jwt-decode";
 import { mapGetters } from "vuex";
 import { User } from "../../../models/User";
 
-import { UserViewModel } from "../../../models/View Models/UserViewModel";
-import AddressComponent from "../../shared/components/Address";
+
 import FileUpload from "@/components/base/FileUpload";
-import ChangePassword from "../../../components/shared/ChangePassword";
+
 import {
   extend,
   ValidationObserver,
@@ -292,9 +157,7 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
-    AddressComponent,
     FileUpload,
-    ChangePassword,
   },
   data: () => ({
     name: "",
@@ -305,6 +168,8 @@ export default {
     value: String,
     select: null,
     roles: [],
+    staffs:[],
+    Getemails:[],
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     checkbox: null,
     user: new User(),
@@ -318,7 +183,6 @@ export default {
     CurrentUser: "",
   }),
   computed: {
-    ...mapGetters("user", ["GetUsers"]),
   },
 
   methods: {
@@ -327,65 +191,13 @@ export default {
     },
     async submit() {
       const isValid = await this.$refs.observer.validate();
-      let addrssComponentValid = true;
-      if (
-        this.user.address.address_line1 ||
-        this.user.address.city ||
-        this.user.address.country_id
-      ) {
-        addrssComponentValid = await this.$refs.addressComponent.isValid();
-      }
-      if (isValid && addrssComponentValid) {
+      if (isValid) {
         this.EditUser();
       }
     },
-    // GetLoginUser() {
-    //   this.$store;
-    //   this.$store
-    //     .dispatch("user/LoginUser")
-    //     .then((res) => {
-    //
-    //       this.LoginUser = res.data.firstName;
-    //
-    //     })
-    //     .catch((err) => {
-    //       this.isLoading = false;
-    //       this.messages = err.data.title;
-    //     });
-    // },
     clear() {
       this.user = new User();
       this.$refs.observer.reset();
-    },
-    async UploadUserImage(userId) {
-      let fromData = new FormData();
-
-      if (this.selectedImages && this.imageUpdated) {
-        fromData.append("image", this.selectedImages);
-        fromData.append("id", userId);
-        return await this.$store
-          .dispatch(`user/UploadUserImage`, fromData)
-          .then(() => {})
-          .catch(() => {
-            this.$toast.error("User image uploading failed");
-          });
-      } else if (this.imageUpdated == false) {
-        debugger;
-        fromData.append("image", this.selectedImages);
-        fromData.append("id", userId);
-        return await this.$store
-          .dispatch(`user/UploadUserImage`, fromData)
-          .then(() => {})
-          .catch(() => {
-            this.$toast.error("User image uploading failed");
-          });
-      } else {
-        return true;
-      }
-      debugger;
-
-      formData.append("id", id);
-      console.log(this.selectedImages);
     },
 
     cancel() {
@@ -402,10 +214,9 @@ export default {
       this.user.Id = userId;
 
       this.$store
-        .dispatch("user/EditUser", this.user)
+        .dispatch("user/EditUser", new User().toUpdate(this.user))
         .then(async (res) => {
-          this.$router.push("/user");
-          await this.UploadUserImage(userId)
+          this.$router.push("/user")
             .then(() => {
               this.succeeed = true;
               this.isLoading = false;
@@ -432,7 +243,8 @@ export default {
         });
     },
 
-    GetRoles() {
+
+    GetRoles() {     
       this.$store
         .dispatch("user/GetRoles")
         .then((res) => {
@@ -443,44 +255,49 @@ export default {
         });
     },
 
-    getUser() {
-      let userId = this.$route.params.id;
+ GetSingleUser() {
+ let UserId = this.$route.params.id;
       this.$store
-        .dispatch("user/GetSingleUser", userId)
+        .dispatch("user/GetSingleUser",UserId)
         .then((res) => {
-          this.succeeed = true;
-          this.user = new UserViewModel(res.data);
-          if (this.user.image) {
-            this.user.image = this.user.image + "?t=" + Date.now();
-          }
-
-          console.log(this.user);
-          this.oldUserDetails = this.user;
-          this.loginedUser = this.parseJwt(localStorage.getItem("token"));
-          const index = this.loginedUser.roles.findIndex(
-            (role) => role.name === "Admin"
-          );
-          this.isAdmin = index != -1;
-          if (index == -1 && this.loginedUser.username !== this.user.username) {
-            // this.$router.push("/accessDenied");
-          }
+          this.user = new User().toInitilaize(res.data.data);
         })
         .catch((err) => {
-          this.messages.push(err.data);
-          // this.$router.push("/accessDenied");
+          this.messages = err.data.title;
         });
     },
-    parseJwt(token) {
-      jwt_decode(token);
-      const user = new User().initialise(jwt_decode(token).rese);
-      return user;
+        GetUsers() {
+      this.$store
+        .dispatch("staff/GetStaffs")
+        .then((res) => {
+          this.staffs = res.data.data;
+        })
+        .catch((err) => {
+          this.messages = err.data.title;
+        });
     },
+     GetEmails() {
+      this.$store
+        .dispatch("fetchmsuser")
+        .then((res) => {
+          this.Getemails = res.data.map((p) => {
+            let object = new Object();
+            object.id = p.mail;
+            object.name = p.mail;
+            return object;
+          });
+        })
+        .catch((err) => console.log(err));
+    },
+   
   },
   created() {
+
     this.GetRoles();
-    this.getUser();
-    // this.GetLoginUser();
-    this.loginedUser = this.parseJwt(localStorage.getItem("token"));
+    this.GetEmails();
+    this.GetSingleUser();
+    this.GetUsers();
+    
   },
 };
 </script>

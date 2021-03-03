@@ -16,8 +16,7 @@ export default {
       if (this.$route.params.id) {
         var replacedJson = null;
         var json = JSON.stringify(this.$route.meta.breadcrumb);
-        if (this.bread) {
-          debugger
+        if (this.bread) {      
           replacedJson = json.replace(":id", this.bread);
         } else {
           replacedJson = json.replace(":id", this.$route.params.id);

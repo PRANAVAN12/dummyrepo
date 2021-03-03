@@ -28,7 +28,78 @@ const actions = {
         });
     });
   },
+  GetDesignations() {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("designations")
+        .then((res) => {
+          
+          resolve(res);
+        })
+        .catch((err) => {
+          console.log("Error");
+          reject(err.response);
+        });
+    });
+  },
 
+  GetEmployeeTypes() {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("employment-types")
+        .then((res) => {
+          
+          resolve(res);
+        })
+        .catch((err) => {
+          console.log("Error");
+          reject(err.response);
+        });
+    });
+  },
+  GetLeaveTypes() {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("leave-types")
+        .then((res) => {
+          
+          resolve(res);
+        })
+        .catch((err) => {
+          console.log("Error");
+          reject(err.response);
+        });
+    });
+  },
+  GetSaluations() {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("salutations")
+        .then((res) => {
+          
+          resolve(res);
+        })
+        .catch((err) => {
+          console.log("Error");
+          reject(err.response);
+        });
+    });
+  },
+
+  GetOffices() {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("offices")
+        .then((res) => {
+          
+          resolve(res);
+        })
+        .catch((err) => {
+          console.log("Error");
+          reject(err.response);
+        });
+    });
+  },
   // Pagination Settings
   GetPaginationSettings({ commit }, payload) {
     console.log("Calling pagination settings");
@@ -99,18 +170,16 @@ const actions = {
         });
     });
   },
-  async GetPOSSettings({commit}) {
+  async GetPOSSettings({ commit }) {
     return new Promise((resolve, reject) => {
       axios
         .get(`settings/pos-configuration/1`)
 
         .then((resp) => {
-          debugger
-          
+
           commit("SET_POS_URL", resp.data.pos_url);
           console.log("Request succeeded");
           resolve(resp);
-        
         })
         .catch((err) => {
           console.log("Error");
@@ -119,7 +188,6 @@ const actions = {
     });
   },
 
- 
   /* ========================= Roles ========================= */
   GetRoles() {
     return new Promise((resolve, reject) => {
@@ -194,6 +262,20 @@ const actions = {
         })
         .catch((err) => {
           reject(err.response);
+        });
+    });
+  },
+
+  /* =========================  Get Emails ========================= */
+  async fetchmsuser({ commit }, payload = {}) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("auth/getFromAd")
+        .then((res) => {
+          resolve(res.data);
+        })
+        .catch((err) => {
+          reject(err);
         });
     });
   },

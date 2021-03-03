@@ -176,7 +176,6 @@ export default {
           this.checkSingleGroupData.splice(index, 1);
         }
       } else {
-        debugger;
         this.checkSingleGroupData.push(key);
       }
     },
@@ -191,7 +190,6 @@ export default {
         .catch((error) => console.log(error));
     },
     checkSingleGroupPolicies(items, key) {
-      debugger;
       items.map((item) => {
         let isValue = this.role.policies.includes(item.id);
         if (isValue == true) {

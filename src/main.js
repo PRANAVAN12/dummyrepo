@@ -9,7 +9,9 @@ import VueCryptojs from "vue-cryptojs";
 import VuetifyConfirm from "vuetify-confirm";
 import DatetimePicker from "vuetify-datetime-picker";
 import Permissions from "./constants/Permissions";
-
+import "@/plugins/msal";
+import moment from "moment";
+import vuescroll from "vue-scroll";
 // vue toggle Button
 import ToggleButton from "vue-js-toggle-button";
 Vue.use(ToggleButton);
@@ -29,7 +31,7 @@ const options = {
   hideCloseButton: false,
 };
 Vue.use(Toast, options);
-
+Vue.use(vuescroll, { debounce: 600 });
 /*======================== Common components ======================== */
 // Breadcrumb
 import Breadcrumbs from "@/components/base/Breadcrumbs";
@@ -75,10 +77,6 @@ import ImportExportMenu from "./components/shared/ImportExportMenu";
 
 Vue.component("ImportExportMenu", ImportExportMenu);
 
-import PosCurrency from "./components/shared/CurrencyInput";
-
-Vue.component("currency-input", PosCurrency);
-
 import Cancelbutton from "./components/shared/CancelButton";
 
 Vue.component("btn-cancel", Cancelbutton);
@@ -86,33 +84,9 @@ Vue.component("btn-cancel", Cancelbutton);
 import VueMask from "v-mask";
 Vue.use(VueMask);
 
-// import AddButton from "@/components/base/AddButton";
-
-// Vue.component("AddButton", AddButton);
-
 import money from "v-money";
 
-// register directive v-money and component <money>
 Vue.use(money, { precision: 4 });
-
-// import AddButton from "@/components/base/AddButton";
-// Vue.use(AddButton)
-
-import PurchaseOrderTemplate from "@/components/PrintTemplates/PurchaseOrderTemplate";
-
-Vue.component("PurchaseOrderTemplate", PurchaseOrderTemplate);
-
-import PurchaseTemplate from "@/components/PrintTemplates/PurchaseTemplate";
-
-Vue.component("PurchaseTemplate", PurchaseTemplate);
-
-import PurchaseReturnTemplate from "@/components/PrintTemplates/PurchaseReturnTemplate";
-
-Vue.component("PurchaseReturnTemplate", PurchaseReturnTemplate);
-
-import BarCodeTemplate from "@/components/PrintTemplates/BarCodeTemplate";
-
-Vue.component("BarCodeTemplate", BarCodeTemplate);
 
 import VueBarcodeScanner from "vue-barcode-scanner";
 
@@ -122,14 +96,6 @@ import CustomModal from "@/components/base/CustomModal";
 
 Vue.component("custom-modal", CustomModal);
 // import VueBarcode from 'vue-barcode';
-//
-// Vue.component('barcode', VueBarcode);
-
-
-//Export Sales
-import SalesExport from "@/components/ExportPdfExcelTemplates/SalesExport.vue"
-
-Vue.component("SalesExport",SalesExport)
 
 import Toasted from "vue-toasted";
 import "./utils/filters";
@@ -155,13 +121,13 @@ Vue.use(VuetifyConfirm, {
   color: "black",
 });
 Vue.prototype.$permissions = Permissions;
+Vue.filter("formatDate", function(value) {
+  if (value) {
+    return moment(String(value)).format("DD/MM/YYYY");
+  }
+});
 import "@/utils/filters";
 import "@/plugins/vuelidate";
-
-/*----------- Charts -----------*/
-import Chartkick from "vue-chartkick";
-import Chart from "chart.js";
-Vue.use(Chartkick.use(Chart));
 
 // Vue.mixin(CustomFilters)
 const app = new Vue({

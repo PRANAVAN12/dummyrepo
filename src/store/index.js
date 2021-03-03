@@ -19,7 +19,7 @@ import PurchaseReturnStore from '../modules/purchase_return/store/PurchaseReturn
 import Customerstore from '../modules/Customer/store/CustomerStore';
 import AutocompleteStore from './modules/Shared/AutocompleteStore';
 import POSSetting from '../modules/shared/settings/posSetting/store/possettingStore'
-import Unit from '../modules/u'
+
 
 Vue.use(Vuex);
 export default new Vuex.Store({

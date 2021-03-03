@@ -168,7 +168,7 @@ export default {
 return this.$refs.addressObserver.validate();
     },
     GetSiteSetting() {
-      debugger
+      
       this.$store
           .dispatch( "sitesetting/SiteSettingView",1)
           .then((res) => {

@@ -161,7 +161,6 @@ export default {
 
           .then((res) => {
             this.$store.dispatch("user/LoginUser");
-            debugger;
             this.$store.dispatch("GetPaginationSettings");
             this.$store.dispatch("GetPOSSettings");
              this.$store.dispatch("sitesetting/SiteSettingView", 1);
@@ -170,11 +169,11 @@ export default {
             if (res.data && res.data.accessToken) {
               localStorage.setItem("token", res.data.accessToken);
               localStorage.setItem("user", JSON.stringify(res.data));
-              setTimeout(() => {
-                this.$router.push({
-                  path: "/",
-                });
-              }, 1000);
+              // setTimeout(() => {
+              //   this.$router.push({
+              //     path: "/",
+              //   });
+              // }, 1000);
               this.loading = false;
             } else if (res.data.redirectLink == "change-password") {
               var userName = this.CryptoJS.AES.encrypt(

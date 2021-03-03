@@ -2,7 +2,7 @@
   File Name: store.js
   Description: Vuex store
 ----------------------------------------------------------------------------------------
-  Item Name: POS SYSTEM
+  Item Name: SPEED HRM
   Author: SpeedCodeLabs
   Author URL: http://www.speedcodelabs.com
 ==========================================================================================*/
@@ -19,26 +19,12 @@ import mutations from "./mutations";
 import actions from "./actions";
 
 // Modules
-import auth from "./modules/auth/moduleAuth";
-import customer from "./modules/customer/moduleCustomer.js";
-import product from "./modules/products/moduleProduct.js";
-import stock from "./modules/stock/moduleStock.js";
-import purchase from "./modules/purchase/modulePurchase.js";
-import purchaseOrder from "./modules/purchase-order/modulePurchaseOrder.js";
-import purchaseReturn from "./modules/purchase-return/modulePurchaseReturn.js";
-import supplier from "./modules/supplier/moduleSupplier.js";
+import staff from "./modules/staff/moduleStaff.js";
 import user from "./modules/user/moduleUser.js";
-import warehouse from "./modules/warehouse/moduleWarehouse.js";
-import brand from "./modules/brand/moduleBrand";
-import Category from "../existing_store/shared/settings/pagination/store/productCategoryStore";
-import Unit from './modules/unit/moduleUnitStore';
-import discount from './modules/Discount/moduleDiscount';
-import sales from "./modules/Sales/moduleSales.js";
-import shop from "./modules/shop/moduleShop.js"
-import chequeManagement from "./modules/cheque-management/moduleChequeManagement.js"
-import report from "./modules/reports/moduleReport.js"
-import common from "./modules/common/moduleCommon.js"
 import sitesetting from "./modules/site-setting/moduleSiteseting";
+import common from "./modules/common/moduleCommon";
+import event from "./modules/event/moduleEvent.js";
+import system from "./modules/systemmanager/moduleSystemManager.js";
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
@@ -47,23 +33,11 @@ export default new Vuex.Store({
   state,
   actions,
   modules: {
-    auth, brand,
-    customer,
-    product,
-    stock,common,
-    purchase,
-    purchaseOrder,
-    purchaseReturn,
-    supplier,
+    staff,
     user,
-    warehouse,
-    Category,
-    Unit,
-    discount,
-    sitesetting,shop,
-    sales,
-    chequeManagement,
-    report
+    sitesetting,
+    common,
+    event,system
 
   },
   // strict: process.env.NODE_ENV !== "production"

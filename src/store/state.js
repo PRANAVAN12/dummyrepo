@@ -11,7 +11,7 @@
 
 const state = {
   // Theme default confiqurations
-  theme: "light",
+  theme: "dark",
   // Master Data
   countries: "",
   server_messages: [],

@@ -1,4 +1,4 @@
-# pos-and-inventory-client
+# Speedhrm-client
 
 ## Project setup
 ```

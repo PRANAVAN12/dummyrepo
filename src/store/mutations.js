@@ -29,7 +29,6 @@ const mutations = {
     state.pagination_settings = payload;
   },
   SET_BREADCRUMB(state, payload) {
-    debugger;
     state.breadcrumb = payload;
   },
   SET_COLOR_MODE(state, payload) {

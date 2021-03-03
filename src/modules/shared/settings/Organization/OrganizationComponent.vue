@@ -208,7 +208,7 @@ export default {
       }
     },
     OrganizationSettings() {
-      debugger;
+ 
       this.isLoading = true;
       const credentials = this.organization;
       delete credentials.image;
@@ -235,7 +235,7 @@ export default {
       this.$store
         .dispatch("sitesetting/OrganizationView", id)
         .then((res) => {
-          debugger;
+       
           this.organization = res.data;
         })
         .catch((err) => {
@@ -256,7 +256,7 @@ export default {
     },
 
     uploadImage() {
-      debugger;
+     
       let fromData = new FormData();
       if (this.selectedImages && this.updatedImage) {
         fromData.append("id", 1);

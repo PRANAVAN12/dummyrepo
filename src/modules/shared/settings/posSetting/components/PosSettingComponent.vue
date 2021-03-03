@@ -305,7 +305,6 @@ export default {
       this.$store
         .dispatch("shop/GetShop")
         .then((res) => {
-          debugger;
 
           this.shops = res;
         })

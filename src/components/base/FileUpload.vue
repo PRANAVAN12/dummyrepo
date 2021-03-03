@@ -411,7 +411,6 @@ export default {
   },
   methods: {
     GetImage() {
-      debugger
       setTimeout(() => {
         if (this.externalFiles.length != 0) {
           this.itemsPreviews = this.externalFiles;

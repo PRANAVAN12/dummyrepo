@@ -1,388 +1,605 @@
 <template>
-  <v-container fluid class="lighten-12 content">
-    <v-row>
-      <v-col cols="12" xs="12" sm="12" md="6" lg="6" xl="6">
-        <h2>
-          Welcome
-          {{
-            user.first_name.charAt(0).toUpperCase() +
-            user.first_name.substring(1) +
-            " " +
-            user.last_name.charAt(0).toUpperCase() +
-            user.last_name.substring(1)
-          }}
-        </h2>
-      </v-col>
-      <v-col
-        cols="12"
-        xs="12"
-        sm="12"
-        md="6"
-        lg="6"
-        xl="6"
-        class="d-flex justify-end"
-      >
-        <v-btn-toggle
-          v-model="summaryRange"
-          @change="getDashboardSummary()"
-          shaped
-          mandatory
-          dense
-          background-color="grey"
-        >
-          <v-btn>
-            <span class="hidden-sm-and-down">Today</span>
-          </v-btn>
-
-          <v-btn>
-            <span class="hidden-sm-and-down">Last 7 days</span>
-          </v-btn>
-
-          <v-btn>
-            <span class="hidden-sm-and-down">This Month</span>
-          </v-btn>
-
-          <v-btn>
-            <span class="hidden-sm-and-down">This Year</span>
-          </v-btn>
-        </v-btn-toggle>
-      </v-col>
-    </v-row>
-
-    <v-divider></v-divider>
-    <v-row>
-      <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12">
-        <v-row>
-          <v-col
-            cols="12"
-            xs="12"
-            sm="12"
-            md="3"
-            lg="3"
-            xl="3"
-            style="
-              background: linear-gradient(
-                to left,
-                rgb(244 244 244) 0%,
-                rgb(244 244 244) 100%
-              ) !important;
-            "
-            class="py-0 d-flex"
-          >
-            <v-card class="lighten-12 card-content py-0" width="100%">
-              <div class="pt-4 pl-4"><strong>Total Customers</strong></div>
-              <div class="amount pl-4">
-                {{ dashBoardSummary.total_customers }}
-              </div>
-              <div class="pb-4 pl-4">
-                <span class="py-5" style="color: green">
-                  <strong>
-                    {{
-                      getCustomerPercentage(
-                        dashBoardSummary.total_customers,
-                        dashBoardSummary.active_customers
-                      )
-                    }}%
-                  </strong></span
-                >Active
-              </div>
-            </v-card>
-          </v-col>
-          <v-col
-            cols="12"
-            xs="12"
-            sm="12"
-            md="3"
-            lg="3"
-            xl="3"
-            style="
-              background: linear-gradient(
-                to left,
-                rgb(244 244 244) 0%,
-                rgb(244 244 244) 100%
-              ) !important;
-            "
-            class="py-0 d-flex"
-          >
-            <v-card class="lighten-12 card-content py-0" width="100%">
-              <div class="pt-4 pl-4">
-                <strong>{{ getRangeText() }} Sales</strong>
-              </div>
-              <div class="amount pl-4">
-                {{ dashBoardSummary.sales_amount | formatCurrency }}
-              </div>
-              <div class="pb-4 pl-4">
-                <span>
-                  <strong> {{ dashBoardSummary.sales_count }}</strong>
-                </span>
-                {{ dashBoardSummary.sales_count > 1 ? "Sales" : "Sale" }}
-              </div>
-            </v-card>
-          </v-col>
-          <v-col
-            cols="12"
-            xs="12"
-            sm="12"
-            md="3"
-            lg="3"
-            xl="3"
-            style="
-              background: linear-gradient(
-                to left,
-                rgb(244 244 244) 0%,
-                rgb(244 244 244) 100%
-              ) !important;
-            "
-            class="py-0 d-flex"
-          >
-            <v-card class="lighten-12 card-content py-0" width="100%">
-              <div class="pt-4 pl-4">
-                <strong> {{ getRangeText() }} Purchases</strong>
-              </div>
-              <div class="amount pl-4">
-                {{ dashBoardSummary.purchase_amount | formatCurrency }}
-              </div>
-              <div class="pb-4 pl-4">
-                <span>
-                  <strong> {{ dashBoardSummary.purchase_count }}</strong>
-                </span>
-                {{
-                  dashBoardSummary.purchase_count > 1 ? "Purchases" : "Purchase"
-                }}
-              </div>
-            </v-card>
-          </v-col>
-          <v-col
-            cols="12"
-            xs="12"
-            sm="12"
-            md="3"
-            lg="3"
-            xl="3"
-            style="
-              background: linear-gradient(
-                to left,
-                rgb(244 244 244) 0%,
-                rgb(244 244 244) 100%
-              ) !important;
-            "
-            class="py-0 d-flex"
-          >
-            <v-card class="lighten-12 card-content py-0" width="100%">
-              <div class="pt-4 pl-4">
-                <strong> {{ getRangeText() }} Expenses</strong>
-              </div>
-              <div class="amount pl-4">
-                {{ dashBoardSummary.expense_amount | formatCurrency }}
-              </div>
-              <div class="pb-4 pl-4">
-                <span>
-                  <strong> {{ dashBoardSummary.expense_count }}</strong>
-                </span>
-                {{
-                  dashBoardSummary.expense_count > 1 ? "Expenses" : "Expense"
-                }}
-              </div>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" xs="12" sm="12" md="6" lg="6" xl="6">
-        <v-row v-if="false">
-          <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12">
-            <v-card class="lighten-12 card-content pa-5">
-              <div>Sales:Warehouse/Product Category</div>
-              <LineChart />
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12"
-            ><v-card class="lighten-12 card-content pa-5">
-              <CategoryPieChart />
-            </v-card>
-          </v-col>
-          <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12"
-            ><v-card class="lighten-12 card-content pa-5">
-              <SaleProductPieChart />
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-row v-if="false">
-          <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12">
-            <v-card class="lighten-12 card-content pa-5">
-              <div>Purchasing:Warehouse/Product Category</div>
-              <ColumnChart />
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col cols="12" xs="12" sm="12" md="6" lg="6" xl="6">
-        <v-row>
-          <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12">
-            <v-card class="lighten-12 card-content pa-5">
-              <div class="dashboard-card-title">Quick Links</div>
-              <v-row>
+  <div>
+    <v-container fluid>
+      <v-row>
+   
+        <v-col cols="12" lg="12" class="mb-0">
+          <h2>Welcome to Speed Hrm</h2>
+        </v-col>
+        
+         </v-row>
+         <v-row>
+        
+           <v-col lg="4" class="py-0">
+          <v-sheet height="48">
+            <v-toolbar flat>
+            
+              <v-btn fab text small color="grey darken-2" @click="prev">
+                <v-icon small> mdi-chevron-left </v-icon>
+              </v-btn>
+              <v-btn fab text small color="grey darken-2" @click="next">
+                <v-icon small> mdi-chevron-right </v-icon>
+              </v-btn>
+              <v-toolbar-title v-if="$refs.calendar">
+                {{ $refs.calendar.title }}
+              </v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-menu bottom right>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    outlined
+                    color="grey darken-2"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <span>{{ typeToLabel[type] }}</span>
+                    <v-icon right> mdi-menu-down </v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item @click="type = 'day'">
+                    <v-list-item-title>Day</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="type = 'week'">
+                    <v-list-item-title>Week</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="type = 'month'">
+                    <v-list-item-title>Month</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="type = '4day'">
+                    <v-list-item-title>4 days</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-toolbar>
+          </v-sheet>
+          <v-sheet height="450px">
+            <v-calendar
+              ref="calendar"
+              v-model="focus"
+              color="primary"
+              :events="eventsdata"
+              :event-color="getEventColor"
+              :type="type"
+                 @click:event="showEvent"
+                      @click:more="viewDay"
+                      @click:date="viewDay"
+                      @change="updateRange"
+            ></v-calendar>
+            <v-menu
+              v-model="selectedOpen"
+              :close-on-content-click="false"
+              :activator="selectedElement"
+              offset-x
+            >
+              <v-card color="grey lighten-4" min-width="350px" flat>
+                <v-toolbar :color="selectedEvent.color" dark>
+                  <!-- <v-btn icon>
+                    <v-icon>mdi-pencil</v-icon>
+                  </v-btn> -->
+                  <v-toolbar-title
+                    v-html="selectedEvent.name"
+                  ></v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-btn icon>
+                    <v-icon>mdi-heart</v-icon>
+                  </v-btn>
+                  <v-btn icon>
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </v-toolbar>
+                <v-card-text>
+                  <span v-html="selectedEvent.details"></span>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn text color="secondary" @click="selectedOpen = false">
+                    Cancel
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-menu>
+          </v-sheet>
+        </v-col>
+      
+ 
+    
+        <v-col class="py-0" lg="4" >
+           <v-card height="78px">
+             
+                       <v-container fluid>
+              <v-row class="ui1">
                 <v-col
-                  cols="12"
-                  xs="12"
-                  sm="12"
-                  md="2"
-                  lg="4"
-                  xl="4"
-                  @click="$router.push('product-list')"
-                  style="cursor: pointer"
+                  lg="3
+                  "
                 >
-                  <div class="d-flex justify-center">
-                    <v-icon
-                      color="white lighten-2"
-                      class="quick-link-icon green lighten-2"
-                      large
-                      >mdi-layers-triple-outline</v-icon
-                    >
-                  </div>
-                  <div class="d-flex justify-center quick-link-label">
-                    Product in stocks
-                  </div>
+                  <h4>Work Hours</h4>
                 </v-col>
-
-                <v-col
-                  cols="12"
-                  xs="12"
-                  sm="12"
-                  md="2"
-                  lg="4"
-                  xl="4"
-                  style="cursor: pointer"
-                  @click="$router.push('expired-product-list')"
-                >
-                  <div class="d-flex justify-center">
-                    <v-icon
-                      color="white lighten-2"
-                      class="quick-link-icon orange lighten-2"
-                      large
-                      >mdi-lock-clock</v-icon
-                    >
-                  </div>
-                  <div class="d-flex justify-center quick-link-label">
-                    Expired Products
-                  </div>
+                <v-col lg="4" class="pl-0">
+                  <!-- <v-chip label :color="this.totaldaywork.background" > -->
+                  {{ this.totaldaywork.total_working_hours }}
+                  <!-- </v-chip> -->
                 </v-col>
-                <v-col
-                  cols="12"
-                  xs="12"
-                  sm="12"
-                  md="2"
-                  lg="4"
-                  xl="4"
-                  style="cursor: pointer"
-                  @click="$router.push('damaged-product-list')"
-                >
-                  <div class="d-flex justify-center">
-                    <v-icon
-                      color="white lighten-2"
-                      class="quick-link-icon red lighten-2"
-                      large
-                      >mdi-image-broken-variant</v-icon
-                    >
-                  </div>
-                  <div class="d-flex justify-center quick-link-label">
-                    Damage Products
-                  </div>
+                <v-col lg="3">
+                  <h4>Breake Hours</h4>
+                </v-col>
+                <v-col lg="2" class="pl-0">
+                  <!-- <v-chip label class="ui1"> -->
+                  {{ this.totaldaywork.total_essential_breakes_hours }}
+                  <!-- </v-chip> -->
                 </v-col>
               </v-row>
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-row :hidden="noOfCustomers > 0">
-          <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" 
-            ><v-card class="lighten-12 card-content pa-4">
-              <TopCustomers v-model="noOfCustomers" />
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-  </v-container>
+            </v-container>
+        
+          </v-card>
+          <v-col></v-col>
+          <v-card hover class="card-height" height="395px">
+            <v-card-title>
+              <h3>Leave</h3>
+            </v-card-title>
+            <v-container fluid>
+              <v-row>
+                <v-col cols="12" sm="12" md="6" lg="5">
+                
+                </v-col>
+                <v-col lg="2">
+                 Total
+                              </v-col>
+                              <v-col  lg="2">
+                Taken
+                </v-col>
+                <v-col  lg="3">
+                  Available
+                </v-col>
+              </v-row>
+            
+               <v-row v-for="(item, index) in selectedLeaveAllocation" :key="index">
+                <v-col cols="12" sm="12" md="6" lg="5">
+                  <h4>{{item.leaveType.name}} leave</h4>
+                </v-col>
+                <v-col  lg="2">
+                  <v-avatar
+      color="indigo"
+      size="40"
+    >
+      <span class="white--text ">{{item.total}}</span>
+    </v-avatar>
+                </v-col>
+                <v-col  lg="2">
+                   <v-avatar
+      color="teal"
+      size="40"
+    >
+      <span class="white--text ">{{item.taken}}</span>
+    </v-avatar>
+                </v-col>
+                <v-col  lg="2">
+                  <v-avatar
+      color="orange"
+      size="40"
+    >
+      <span class="white--text ">{{item.available}}</span>
+    </v-avatar>
+                </v-col>
+              </v-row>
+              
+            
+            </v-container>
+          </v-card>
+         
+         
+      
+        </v-col>
+      
+        <v-col cols="12" lg="4" md="12" sm="12" class="py-0">
+          <v-card hover class="overflow-y-auto" height="495px">
+            <v-card-title class="py-0">
+              <v-list>
+                <v-row>
+                  <v-col lg="9">
+                  <v-list-item>
+                    <v-list-item-avatar>
+                      <v-img :src="avatar"></v-img>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ this.username }}</v-list-item-title>
+                      <v-list-item-subtitle>{{
+                        this.jobTitle
+                      }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  </v-col>
+                  <v-col lg="3">
+                      <v-container fluid>
+            
+                
+                 
+                    <v-list-item-action>
+                      <toggle-button
+                        :value="true"
+                        :sync="true"
+                        color="red"
+                        :movement="movement"
+                        v-model="inOutToggle"
+                        @change="changeMovementToggle"
+                        :labels="{ checked: 'Out', unchecked: 'In' }" 
+                      />
+
+                    </v-list-item-action>
+              
+                
+              </v-container>
+                  </v-col>
+                  
+                  
+                  
+                </v-row>
+              </v-list>
+            </v-card-title>
+            <v-container fluid>
+              <div class="moments">
+              <v-timeline
+                class="pa-0"
+                align-top
+                dense
+                v-for="(item, i) in attendances"
+                :key="i"
+              >
+                <v-timeline-item :color="item.background" small class="m-0">
+                  <v-row>
+                    <v-col lg="8">
+                      <v-list-item>
+                        <v-list-item-content>
+                          <v-list-item-title>{{
+                            item.moment
+                          }}</v-list-item-title>
+                          <v-list-item-subtitle>
+                            {{ item.movement_date }}</v-list-item-subtitle
+                          >
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                    <v-col lg="4">
+                      <v-list-item>
+                        <v-list-item-content>
+                          <v-list-item-subtitle>
+                            {{ item.duration }}</v-list-item-subtitle
+                          >
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
+              </v-timeline>
+              </div>
+            </v-container>
+   
+        
+            
+          
+          </v-card>
+        </v-col>
+         </v-row>
+         <v-container fluid>
+         <v-row>
+        
+             
+             
+            <v-carousel>
+
+      <v-carousel-item
+        src="../../assets/img/sliderpic1.jpg"
+        reverse-transition="fade"
+        transition="fade"
+        
+      ></v-carousel-item>
+    </v-carousel>
+          
+           
+ 
+         </v-row>
+            </v-container>
+
+     <Attendace
+        ref="attendance"
+        :inOutToggle="inOutToggle"
+       :moment="last_element"
+        @conform="TodayAttendances()"
+        @cancels="inOutToggle=!inOutToggle"
+      />
+
+    </v-container>
+
+  </div>
 </template>
-
 <script>
-// Charts
-import LineChart from "@/components/Charts/LineChart";
-import ColumnChart from "@/components/Charts/ColumnChart";
-import DateRangeFilter from "@/components/base/DateRangeFilter";
-import CategoryPieChart from "./CategoryPieChart";
-import SaleProductPieChart from "./SaleProductPieChart";
-import TopCustomers from "./TopCustomersList";
-
-import { mapState } from "vuex";
-import axios from "@/plugins/axios";
-
+import { Event } from "../../models/Event";
+import Attendace from "./Attendance";
+// :moment="last_element.momentBy.relatedMoment"
 export default {
-  name: "Home",
-  data: () => ({
-    dashBoardSummary: {},
-    summaryRange: 0,
-    noOfCustomers: 0,
-  }),
-  computed: {
-    ...mapState("user", ["user"]),
-    ...mapState(["theme"]),
+  props: {
+    movement: {
+      type: Boolean,
+      default: true,
+    },
+    // moment:{
+    //    type: Array,
+    //   default: true,
+    // }
   },
   components: {
-    LineChart,
-    ColumnChart,
-    DateRangeFilter,
-    CategoryPieChart,
-    SaleProductPieChart,
-    TopCustomers,
+    Attendace,
   },
-  methods: {
-    getDashboardSummary() {
-      axios
-        .get(`dashboard/summary?range=${this.getRange()}`)
-        .then((resp) => {
-          this.dashBoardSummary = resp.data.data;
-        })
-        .catch((err) => {
-          reject(err.response);
-        });
+  data: () => ({
+    avatar: "",
+    jobTitle: "",
+    selectedLeaveAllocation:[],
+    last_element:null,
+
+    attendances: [],
+    eventsdata: [],
+    totaldaywork: {},
+    inOutToggle: false,
+    focus: "",
+    type: "month",
+    typeToLabel: {
+      month: "Month",
+      week: "Week",
+      day: "Day",
+      "4day": "4 Days",
     },
-    getRange() {
-      if (this.summaryRange == 0) {
-        return "today";
-      } else if (this.summaryRange == 1) {
-        return "last7Days";
-      } else if (this.summaryRange == 2) {
-        return "thisMonth";
-      } else if (this.summaryRange == 3) {
-        return "thisYear";
-      }
-    },
-    getRangeText() {
-      if (this.summaryRange == 0) {
-        return "Today";
-      } else if (this.summaryRange == 1) {
-        return "Last 7 Days";
-      } else if (this.summaryRange == 2) {
-        return "This Month";
-      } else if (this.summaryRange == 3) {
-        return "This Year";
-      }
-    },
-    getCustomerPercentage(total, active) {
-      let result = (active / total) * 100;
-      if (result % 1 == 0) {
-        return result;
-      } else {
-        return result.toFixed(2);
-      }
-    },
+    selectedEvent: {},
+    selectedElement: null,
+    selectedOpen: false,
+    events: [],
+    relatedMovements:[]
+    
+  }),
+  mounted() {
+    this.$refs.calendar.checkChange();
+    this.colurs = this.inOutToggle == false ? "success" : "red darken-3";
   },
   created() {
-    this.getDashboardSummary();
+    // debugger
+    //  var intervalId = setInterval(() => {
+      //  let { email, token } = this;
+      //  var isAuthenticated=this.$msal.isAuthenticated()
+      //  if(isAuthenticated){
+          // this.GetLoginUser(email, token);
+          // clearInterval(intervalId);
+         
+      //  }
+      // if (token !== null && !localStorage.getItem("token")) {   
+      //    this.fetchPhoto();      
+      //   this.GetLoginUser(email, token);
+      //    clearInterval(intervalId);
+      // }
+     
+    // }, 500);
+
+    this.GetEvents();
+    this.TodayAttendances();
+    this.GetLeaveAllocation();
+    var intervalId = setInterval(() => {
+     this.fetchPhoto();
+      this.fetchData();
+      //  let { email, token } = this;
+      // if (token !== null) {
+      //   this.GetLoginUser(email, token);
+      //    clearInterval(intervalId);
+      // }
+      clearInterval(intervalId);
+    }, 500);
+  },
+  computed: {
+    username() {
+      return (this.msal && this.msal.user.name) || "Unknown";
+    },
+    email() {
+   
+      return (this.msal && this.msal.user.userName) || null;
+    },
+    token() {
+      return (this.msal && this.msal.accessToken) || null;
+    },
+  },
+  methods: {
+    // GetLoginUser( email, token) {
+      
+    //   this.$store.dispatch("user/Logins", { email, token }).then((res)=>{ 
+    //       if (res.data && res.data.accessToken) {
+    //         this.$store.dispatch("user/LoginUsers").then(resp=>{
+    //           this.$router.push("/");
+    //           this.loading = false;
+    //         })   
+    //       }else{
+    //         this.$router.push("/notFound");
+    //       }
+    //   })
+    // },
+    viewDay({ date }) {
+      this.focus = date;
+      this.type = "day";
+    },
+    getEventColor(event) {
+      return event.color;
+    },
+    
+    setToday() {
+      this.focus = "";
+    },
+    prev() {
+      this.$refs.calendar.prev();
+    },
+    next() {
+      this.$refs.calendar.next();
+    },
+    showEvent({ nativeEvent, event }) {
+      const open = () => {
+        this.selectedEvent = event;
+        this.selectedElement = nativeEvent.target;
+        setTimeout(() => {
+          this.selectedOpen = true;
+        }, 10);
+      };
+
+      if (this.selectedOpen) {
+        this.selectedOpen = false;
+        setTimeout(open, 10);
+      } else {
+        open();
+      }
+
+      nativeEvent.stopPropagation();
+    },
+    TodayAttendances() {
+      this.$store
+        .dispatch("staff/TodayAttendances")
+        .then((res) => {
+          debugger
+          this.attendances = res.monents;
+          // res.monents.map(moment=>{
+          //   return moment.momentBy.relatedMovements.map(data=>{
+          //     this.relatedMovements.push(data)
+          //   })
+          // })
+          this.totaldaywork = res;
+          let arraylength = this.attendances;
+          if(arraylength && arraylength.length>0)
+          {
+            this.inOutToggle = arraylength[arraylength.length - 1].momentBy.type == "In" ? true : false;
+
+          }
+          if(arraylength &&arraylength.length>0 && arraylength[arraylength.length - 1] &&arraylength[arraylength.length - 1] && arraylength[arraylength.length - 1].momentBy  )
+          {
+            
+  this.last_element = _.cloneDeep(arraylength[arraylength.length - 1].momentBy.relatedMoment );
+          }
+      
+          
+        })
+        .catch((err) => {
+          this.messages = err.data.title;
+        });
+    },
+
+      GetEvents() {
+      this.$store
+        .dispatch("event/GetEvents")
+        .then((res) => {
+          var eventsdata = new Event();
+          this.eventsdata = eventsdata.toListView(res);
+        })
+        .catch((err) => {
+          this.messages = err.data.title;
+        });
+    },
+      GetLeaveAllocation()
+    {
+ this.$store
+        .dispatch(`staff/UserLeaveAllocation`)
+        .then((res) => {
+         this.selectedLeaveAllocation=res;
+        })
+        .catch((err) => {
+          this.isLoading = false;
+         
+        });  
+
+    },
+    changeMovementToggle(value) {
+      // this.inOutToggle=!this.inOutToggle;
+      this.$refs.attendance.openModal();
+    },
+     togglelable(value) {
+      this.$refs.attendance.openModal();
+    },
+    async fetchPhoto() {
+      await this.$msal
+        .msGraph({ url: "/me/photo/$value", responseType: "blob" })
+        .then(({ body }) => {
+          const avatar = (window.URL || window.webkitURL).createObjectURL(body);
+          this.avatar = avatar;
+        })
+        .catch(() => {
+          // this.avatar = process.env.default_avatar
+        });
+    },
+    async fetchData() {
+      await this.$msal
+        .msGraph({ url: "/me" })
+        .then(({ body }) => {
+          this.jobTitle = body.jobTitle;
+        })
+        .catch(() => {
+          // this.avatar = process.env.default_avatar
+        });
+    },
+    viewDay({ date }) {
+      this.focus = date;
+      this.type = "day";
+    },
+    getEventColor(event) {
+      return event.color;
+    },
+    setToday() {
+      this.focus = "";
+    },
+    prev() {
+      this.$refs.calendar.prev();
+    },
+    next() {
+      this.$refs.calendar.next();
+    },
+    showEvent({ nativeEvent, event }) {
+      const open = () => {
+        this.selectedEvent = event;
+        this.selectedElement = nativeEvent.target;
+        setTimeout(() => {
+          this.selectedOpen = true;
+        }, 10);
+      };
+      if (this.selectedOpen) {
+        this.selectedOpen = false;
+        setTimeout(open, 10);
+      } else {
+        open();
+      }
+      nativeEvent.stopPropagation();
+    },
+    updateRange({ start, end }) {
+      const events = [];
+      const min = new Date(`${start.date}T00:00:00`);
+      const max = new Date(`${end.date}T23:59:59`);
+      const days = (max.getTime() - min.getTime()) / 86400000;
+      const eventCount = this.rnd(days, days + 20);
+      for (let i = 0; i < eventCount; i++) {
+        const allDay = this.rnd(0, 3) === 0;
+        const firstTimestamp = this.rnd(min.getTime(), max.getTime());
+        const first = new Date(firstTimestamp - (firstTimestamp % 900000));
+        const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
+        const second = new Date(first.getTime() + secondTimestamp);
+        events.push({
+          name: this.names[this.rnd(0, this.names.length - 1)],
+          start: first,
+          end: second,
+          color: this.colors[this.rnd(0, this.colors.length - 1)],
+          timed: !allDay,
+        });
+      }
+      this.events = events;
+    },
+    rnd(a, b) {
+      return Math.floor((b - a + 1) * Math.random()) + a;
+    },
   },
 };
 </script>
+<style scoped>
+.card-height {
+  height: 250px;
+}
+.ui1 {
+  font-size: 12px;
+}
+
+</style>

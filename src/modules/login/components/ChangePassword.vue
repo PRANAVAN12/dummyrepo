@@ -229,7 +229,7 @@ export default {
   name: "Login",
   methods: {
     onConfirmPasswordMouseDown() {
-      debugger;
+  
       this.passwordNotMatchError = null;
     },
     async ResetPassword() {
@@ -248,7 +248,7 @@ export default {
           "changepassword"
         ).toString(this.CryptoJS.enc.Utf8);
         this.messages = [];
-        debugger;
+
         this.$store
           .dispatch("user/ChangeTempPassword", {
             temp_password: this.form.temp_password,

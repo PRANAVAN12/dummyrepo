@@ -1,341 +1,175 @@
 <template>
-  <v-app id="inspire">
-    <v-navigation-drawer
-      :dark="theme != 'light'"
-      color=" en-3"
-      v-model="drawer"
-      :clipped="$vuetify.breakpoint.lgAndUp"
-      app
-      :mini-variant="!drawer"
-      class="navigation"
-      :permanent="permanent"
-    >
-      <!-- <v-parallax
+  <div>
+    <div class="vld-parent">
+      <loading
+        v-if="!login_status"
+        :height="80"
+        :active.sync="LoadingStatus"
+        :is-full-page="true"
+        :width="80"
+        color="#9d0191"
+      >
+      </loading>
+    </div>
 
-        height="100%"
-        src="https://static.vecteezy.com/system/resources/previews/000/549/665/non_2x/abstract-background--and-black-overlaps-004-vector.jpg"
-      >-->
-     <v-list dense>
-        <template v-for="item in itemList">
-          <v-row
-            v-if="item.heading"
-            :key="item.heading"
-            align="center"
-            class="hie"
-          >
-            <v-col cols="6">
-              <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
-            </v-col>
-            <v-col cols="6" class="text-center">
-              <a href="#!" class="body-2 black--text">EDITt</a>
-            </v-col>
-          </v-row>
-          <v-list-group
-            v-else-if="item.children"
-            :key="item.text"
-            v-model="item.model"
-            :prepend-icon="item.model ? item['icon-alt'] : item.icon"
-            top
-            dense
-          >
-            <v-icon slot="prependIcon" large color="#1d2939">
-              {{ item.model ? item["icon-alt"] : item.icon }}
-            </v-icon>
-            <template v-slot:activator>
-              <v-list-item-content>
-                <v-list-item-title class="sidebar">{{ item.text }}</v-list-item-title>
-              </v-list-item-content>
-            </template>
-            <v-list-item
-              v-for="(child, i) in item.children"
-              :key="i"
-              :to="child.link"
-              link
-              v-ripple="{ class: 'ripple_color' }"
-              :style="drawer ? '' : 'background-color:#b0d7ff7a'"
+    <v-app id="inspire" v-if="login_status">
+      <v-navigation-drawer
+        :dark="theme != 'light'"
+        color=" en-3"
+        v-model="drawer"
+        :clipped="$vuetify.breakpoint.lgAndUp"
+        app
+        :mini-variant="!drawer"
+        class="navigation"
+        :permanent="permanent"
+      >
+     
+
+        <v-list dense>
+          <template v-for="(item,index) in GetMenuList">
+            <v-row
+              v-if="item.heading"
+              :key="item.heading"
+              align="center"
+              class="hie"
             >
-              <v-list-item-action
-                v-if="child.icon"
-                :class="!drawer ? '' : 'ml-4'"
+              <v-col cols="6">
+                <v-subheader v-if="item.heading">{{
+                  item.heading
+                }}</v-subheader>
+              </v-col>
+              <v-col cols="6" class="text-center">
+                <a href="#!" class="body-2 black--text">EDITt</a>
+              </v-col>
+            </v-row>
+            <v-list-group
+              v-else-if="item.children"
+              :key="item.text"
+              v-model="item.model"
+              :prepend-icon="item.model ? item['icon-alt'] : item.icon"
+              top
+              dense
+            >
+              <v-icon slot="prependIcon" large color="#1d2939">
+                {{ item.model ? item["icon-alt"] : item.icon }}
+              </v-icon>
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title class="sidebar">{{
+                    item.text
+                  }}</v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <v-list-item
+                v-for="(child, i) in item.children"
+                :key="i"
+                :to="child.link"
+                link
+                v-ripple="{ class: 'ripple_color' }"
+                :style="drawer ? '' : 'background-color:#b0d7ff7a'"
               >
-                <v-icon>{{ child.icon }}</v-icon>
+                <v-list-item-action
+                  v-if="child.icon"
+                  :class="!drawer ? '' : 'ml-4'"
+                >
+                  <v-icon>{{ child.icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title class="sidebar">{{
+                    child.text
+                  }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+            <v-list-item
+              v-else
+              :key="item.text"
+              link
+              :to="item.link"
+              v-ripple="{ class: 'ripple_color' }"
+            >
+              <v-list-item-action class>
+                <v-icon color="#1d2939">{{ item.icon }}</v-icon>
               </v-list-item-action>
               <v-list-item-content>
-                <v-list-item-title class="sidebar">{{ child.text }}</v-list-item-title>
+                <v-list-item-title class="sidebar">{{
+                  item.text
+                }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-          </v-list-group>
-          <v-list-item
-            v-else
-            :key="item.text"
-            link
-            :to="item.link"
-            v-ripple="{ class: 'ripple_color' }"
-          >
-            <v-list-item-action class>
-              <v-icon color="#1d2939">{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="sidebar">{{ item.text }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
-      </v-list>
-      <!-- </v-parallax> -->
-    </v-navigation-drawer>
+          </template>
+        </v-list>
+        <!-- </v-parallax> -->
+      </v-navigation-drawer>
 
-    <!-- color="white" -->
-    <v-app-bar
-      :dark="theme != 'light'"
-      :color="theme == 'light' ? 'white' : 'black_bar'"
-      height="50"
-      :clipped-left="$vuetify.breakpoint.lgAndUp"
-      app
-      flat
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title
-        style="width: 200px"
-        class="ml-0 pl-4 text-left d-none d-sm-flex"
+      <!-- color="white" -->
+      <v-app-bar
+        :dark="theme != 'light'"
+        :color="theme == 'light' ? 'white' : 'black_bar'"
+        height="55"
+        :clipped-left="$vuetify.breakpoint.lgAndUp"
+        app
+        flat
       >
-        <span class="brand_name">{{ sitename }} </span>
-      </v-toolbar-title>
-      <v-row align="center" justify="center" class="layout_responsive">
-        <v-col cols="6" md="3" lg="2" class="mx-6">
-          <!-- Add New Button -->
-          <v-menu offset-y transition="scroll-y-transition">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                depressed
-                small
-                height="32"
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-toolbar-title
+          style="width: 200px"
+          class="ml-0 pl-4 text-left d-none d-sm-flex"
+        >
+          <img
+            src="../../../assets/img/speedcodelabs.png"
+            alt="logo"
+            height="47"
+          />
+          <!-- <span class="brand_name">{{ sitename }} dsdsdd</span> -->
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
 
-                class="ml-2 text-white  btn_blue w-100 add_btn theme1"
-
-
-
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon class="icon_small ma-2">mdi-plus </v-icon>
-                <section class="btn_responsive">
-                  Add
-                  <v-icon class="icon_small ma-2">mdi-menu-down </v-icon>
-                </section>
-              </v-btn>
-            </template>
-
-            <v-list>
-              <v-list-item
-                v-for="(item, index) in productLists"
-                :key="index"
-                :to="item.link"
-              >
-                <v-list-item-title>
-                  <v-icon class="icon_small ma-2">{{ item.icon }}</v-icon>
-                  {{ item.text }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-col>
-        <v-col cols="6" md="3" lg="2" class="px-0 mx-4">
-          <!-- Report New Button -->
-          <v-menu offset-y transition="scroll-y-transition">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                depressed
-                small
-                height="32"
-                class="theme1 w-100 btn_blue add_btn pa-0 "
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon class="icon_small ma-2">mdi-export </v-icon>
-
-                <section class="btn_responsive">
-                  Reports
-                  <v-icon class="icon_small ma-2">mdi-menu-down </v-icon>
-                </section>
-              </v-btn>
-            </template>
-
-            <v-list>
-              <v-list-item
-                v-for="(item, index) in reportLists"
-                :key="index"
-                :to="item.link"
-              >
-                <v-list-item-title>
-                  <v-icon class="icon_small ma-2">{{ item.icon }}</v-icon>
-                  {{ item.text }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-col>
-        <v-col class="global_search d-none d-md-flex">
-          <v-menu
-            transition="slide-y-transition"
-            bottom
-            :nudge-width="200"
-            content-class="my-menu"
-            :close-on-content-click="false"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn class="shadow" color="transparent" dark v-on="on">
-                <svg
-                  v-if="!color_mode"
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  aria-hidden="true"
-                  focusable="false"
-                  width="2em"
-                  height="3em"
-                  style="
-                    -ms-transform: rotate(360deg);
-                    -webkit-transform: rotate(360deg);
-                    transform: rotate(360deg);
-                  "
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M4 6h2v12H4V6m3 0h1v12H7V6m2 0h3v12H9V6m4 0h1v12h-1V6m3 0h2v12h-2V6m3 0h1v12h-1V6M2 4v4H0V4a2 2 0 0 1 2-2h4v2H2m20-2a2 2 0 0 1 2 2v4h-2V4h-4V2h4M2 16v4h4v2H2a2 2 0 0 1-2-2v-4h2m20 4v-4h2v4a2 2 0 0 1-2 2h-4v-2h4z"
-                    fill="white"
-                  />
-                </svg>
-                <svg
-                  v-if="color_mode"
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  aria-hidden="true"
-                  focusable="false"
-                  width="2em"
-                  height="3em"
-                  style="
-                    -ms-transform: rotate(360deg);
-                    -webkit-transform: rotate(360deg);
-                    transform: rotate(360deg);
-                  "
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M4 6h2v12H4V6m3 0h1v12H7V6m2 0h3v12H9V6m4 0h1v12h-1V6m3 0h2v12h-2V6m3 0h1v12h-1V6M2 4v4H0V4a2 2 0
-                 0 1 2-2h4v2H2m20-2a2 2 0 0 1 2 2v4h-2V4h-4V2h4M2 16v4h4v2H2a2 2 0 0 1-2-2v-4h2m20 4v-4h2v4a2 2 0 0 1-2 2h-4v-2h4z"
-                    fill="#626262"
-                  />
-                </svg>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item>
-                <v-row>
-                  <v-col cols="7">
-                    <v-text-field
-                      v-model="barcode"
-                      autofocus
-                      placeholder="Scan Barcode"
-                      @input="barcodeErrorMessage = null"
-                      error-messages="barcodeErrorMessage"
-                      outlined
-                      hide-details
-                    ></v-text-field>
-                  </v-col>
-
-                  <v-col cols="5">
-                    <v-btn small @click="GetBatchByBarcode(barcode)">
-                      search
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-list-item>
-              <v-list-item v-if="barcodeErrorMessage">
-                <div style="color: darkred">{{ barcodeErrorMessage }}</div>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-col>
-
-        <v-col v-if="false" class="global_search d-none d-md-flex">
-          <v-text-field
-            placeholder="Tell me what you want to do"
-            single-line
-            outlined
-            hide-details
-            prepend-icon="mdi-lightbulb-on"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-spacer></v-spacer>
-
-      
-
-      <v-btn
-        depressed
-        small
-        height="32"
-        class="theme1 w-100 add_btn pa-0"
-        v-bind="attrs"
-        v-on="on"
-        @click="gotopos()"
-        target="_blank"
-      >
-        <v-icon class="icon_small ma-2">mdi-point-of-sale </v-icon>
-
-
-        <section class="btn_responsive pr-4">POS</section>
-      </v-btn>
-      <v-btn icon @click="color_mode = !color_mode" class="mr-3">
-        <img
-          style="fill: white"
-          src="../../../assets/img/sun.svg"
-          height="15"
-          v-show="!color_mode"
-        />
-        <img
-          src="../../../assets/img/moon.svg"
-          height="15"
-          v-show="color_mode"
-        />
-      </v-btn>
-      <!-- <div class="mr-3 py-2">
+        <v-btn icon @click="color_mode = !color_mode" class="mr-3">
+          <img
+            style="fill: white"
+            src="../../../assets/img/sun.svg"
+            height="15"
+            v-show="!color_mode"
+          />
+          <img
+            src="../../../assets/img/moon.svg"
+            height="15"
+            v-show="color_mode"
+          />
+        </v-btn>
+        <!-- <div class="mr-3 py-2">
         <label id="switch" class="switch">
           <input v-model="color_mode" type="checkbox" onchange="toggleTheme()" id="slider" />
           <span class="slider round"></span>
         </label>
       </div> -->
-      <!-- <v-btn icon>
-        <Notification></Notification>
-      </v-btn -->
-      <span class="d-none d-sm-flex">
-        {{ user.first_name }}
-      </span>
-      <v-btn icon>
+        <!-- <v-btn icon>
+          <Notification></Notification>
+        </v-btn> -->
         <UserMenuComponent></UserMenuComponent>
-      </v-btn>
-    </v-app-bar>
-    <v-main>
-      <!-- <v-row> -->
+      </v-app-bar>
+      <v-main>
+        <!-- <v-row> -->
 
-      <!-- <Loading v-if="isLoading"></Loading>
-      <router-view v-else /> -->
-      <Loading></Loading>
-      <!-- <transition name="fade"> -->
-      <router-view />
-      <!-- </transition> -->
-      <!-- </v-row> -->
-    </v-main>
-    <v-footer padless>
-      <v-col class="text-center" cols="12">
-        <strong>
-          {{ new Date().getFullYear() }} @ Copyright — Inventory & POS by Speed
-          Code Labs (Pvt) Ltd
-        </strong>
-      </v-col>
-    </v-footer>
-  </v-app>
+        <!-- <Loading v-if="isLoading"></Loading> -->
+        <!-- <router-view v-else /> -->
+        <!-- <Loading></Loading> -->
+        <!-- <transition name="fade"> -->
+        <router-view />
+        <!-- </transition> -->
+        <!-- </v-row> -->
+      </v-main>
+      <v-footer padless>
+        <v-col class="text-center" cols="12">
+          <strong>
+            {{ new Date().getFullYear() }} @ Copyright — Speed HRM by Speed Code
+            Labs (Pvt) Ltd
+          </strong>
+        </v-col>
+      </v-footer>
+    </v-app>
+  </div>
 </template>
 
 <script>
@@ -343,9 +177,10 @@ import _ from "lodash";
 import UserMenuComponent from "./user.menu";
 import Notification from "./notification";
 import env from "../../../config/env";
-import { mapState } from "vuex";
-import Loading from "@/components/shared/routeLoading.vue";
-
+import { mapState, mapGetters } from "vuex";
+// import Loading from "@/components/shared/routeLoading.vue";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 export default {
   components: {
     UserMenuComponent,
@@ -356,507 +191,173 @@ export default {
     source: String,
   },
   data: () => ({
-    barcode: null,
-    barcodeErrorMessage: null,
+    LoadingStatus: true,
     sitename: "",
     dialog: false,
     drawer: false,
     itemList: [],
-    productLists: [],
-    reportLists: [],
-    items: [
-      {
-        icon: "mdi-home-circle-outline",
-        "icon-alt": "mdi-home-circle",
-        text: "Dashboard",
-        // model: true,
-        link: "/",
-        policy: ["Dashboard Index"],
-      },
-      {
-        icon: "mdi-layers-triple-outline",
-        "icon-alt": "mdi-layers-triple",
-        text: "Products",
-        link: "/product",
-        policy: ["Product Index"],
-      },
-      {
-        icon: "mdi-sack-percent",
-        "icon-alt": "mdi-account-multiple-plus",
-        text: "Sales",
-        link: "/sales",
-        policy: ["Sales Index"],
-      },
-      // {
-      //   icon: "mdi-storefront-outline",
-      //   "icon-alt": "mdi-storefront",
-      //   text: "Purchase Orders",
-      //   link: "/purchase-order",
-      //   policy: ["Purchase Order Index"],
-      // },
-      // {
-      //   icon: "mdi-truck-check-outline",
-      //   "icon-alt": "mdi-truck-check",
-      //   text: "Purchases",
-      //   link: "/purchases",
-      //   policy: ["Purchase Index"],
-      // },
-      // {
-      //   icon: "mdi-truck-delivery-outline",
-      //   "icon-alt": "mdi-truck-delivery",
-      //   text: "Purchase Returns",
-      //   link: "/purchase-return",
-      //   policy: ["Purchase Return Index"],
-      // },
-      {
-        icon: "mdi-account-multiple-outline",
-        "icon-alt": "mdi-account-multiple",
-        text: "Suppliers",
-        link: "/supplier",
-        policy: ["Supplier Index"],
-      },
-      {
-        icon: "mdi-account-multiple-outline",
-        "icon-alt": "mdi-account-multiple-plus",
-        text: "Customers",
-        link: "/customer",
-        policy: ["Customer Index"],
-      },
-      // {
-      //   icon: "mdi-sack-percent",
-      //   "icon-alt": "mdi-account-multiple-plus",
-      //   text: "Discounts",
-      //   link: "/discount",
-      //   policy: ["Discount Index"],
-      // },
-      // {
-      //   icon: "mdi-database-minus",
-      //   "icon-alt": "mdi-database-minus",
-      //   text: "Stock Transfer",
-      //   link: "/stocktransfer",
-      //   policy: ["Transfer Index"],
-      // },
-      {
-        icon: "mdi-warehouse",
-        "icon-alt": "mdi-store",
-        text: "Warehouses",
-        link: "/warehouse",
-        policy: ["Ware House Index"],
-      },
-      // {
-      //   icon: "mdi-account-circle",
-      //   "icon-alt": "mdi-store",
-      //   text: "Accounts",
-      //   link: "/accounts",
-      //   policy: ["Customer Index"],
-      // },
-      {
-        icon: " mdi-shopping",
-        text: "Shops",
-        link: "/shop",
-        policy: ["Shop Index"],
-      },
-      // {
-      //   icon: "mdi-account-circle-outline",
-      //   text: "Users",
-      //   link: "/user",
-      //   policy: ["User Index"],
-      // },
-      // {
-      //   icon: "mdi-checkbook",
-      //   text: "Cheques",
-      //   link: "/cheque",
-      //   policy: ["Cheques Index"],
-      // },
-      // {
-      //   icon: "mdi-cash-multiple",
-      //   text: "Payments",
-      //   link: "/payment",
-      //   policy: ["Cheques Index"],
-      // },
-      {
-        icon: "mdi-truck-check-outline",
-        "icon-alt": "mdi-truck-check",
-        text: "Purchases",
-        link: "/purchases",
-        policy: ["Purchase Index"],
-        children: [
-          {
-            icon: "mdi-storefront-outline",
-            "icon-alt": "mdi-storefront",
-            text: "Purchase Orders",
-            link: "/purchase-order",
-            policy: ["Purchase Order Index"],
-          },
-          {
-            icon: "mdi-truck-check-outline",
-            "icon-alt": "mdi-truck-check",
-            text: "Purchases",
-            link: "/purchase",
-            policy: ["Purchase Index"],
-          },
-          {
-            icon: "mdi-truck-delivery-outline",
-            "icon-alt": "mdi-truck-delivery",
-            text: "Purchase Returns",
-            link: "/purchase-return",
-            policy: ["Purchase Return Index"],
-          },
-        ],
-      },
-      {
-        icon: "mdi-store",
-        "icon-alt": "mdi-store",
-        text: "Stocks",
-        policy: ["Stocks Index"],
-        children: [
-          {
-            icon: "mdi-database",
-            "icon-alt": "mdi-database",
-            text: "Warehouse",
-            link: "/stock",
-            policy: ["Stocks Show"],
-          },
-           {
-            icon: "mdi-database",
-            "icon-alt": "mdi-database",
-            text: "Shop",
-            link: "/shop-stock",
-            policy: ["Stocks Show"],
-          },
-          {
-            icon: "mdi-database-minus",
-            "icon-alt": "mdi-database-minus",
-            text: "Transfer",
-            link: "/stock-transfer",
-            policy: ["Transfer Index"],
-          },
-          // {
-          //   icon: " mdi-shopping",
-          //   text: "Shops",
-          //   link: "/shop",
-          //   policy: ["Customer Index"],
-          // },
-        ],
-      },
-      {
-        icon: "mdi-store",
-        "icon-alt": "mdi-store",
-        text: "Transactions",
-        policy: ["Stocks Index"],
-        children: [
-          {
-            icon: "mdi-cash-multiple",
-            text: "Payments",
-            link: "/payment",
-            policy: ["Cheques Index"],
-          },
-          {
-            icon: "mdi-checkbook",
-            text: "Cheques",
-            link: "/cheque",
-            policy: ["Cheques Index"],
-          },
-          {
-            icon: "mdi-checkbook",
-            text: "Expenses",
-            link: "/expenses",
-            policy: ["Expenses Index"],
-          },
-           {
-            icon: "mdi-checkbook",
-            text: "Incomes",
-            link: "/incomes",
-            policy: ["Expenses Index"],
-          },
-        ],
-      },
-      {
-        icon: "mdi-border-all",
-        "icon-alt": "mdi-border-all",
-        text: "Master Data",
-        policy: ["master"],
-        children: [
-          {
-            icon: "mdi-bulletin-board",
-            text: "Category",
-            link: "/masterdata/category",
-            policys: ["Category Index"],
-          },
-          {
-            icon: "mdi-chemical-weapon",
-            text: "Brand",
-            link: "/masterdata/brand",
-          },
-          {
-            icon: "mdi-yeast",
-            text: "Unit",
-            link: "/masterdata/unit",
-          },
-          {
-            icon: "mdi-yeast",
-            text: "Expence Category",
-            link: "/masterdata/expense-category",
-          },
-          {
-            icon: "mdi-yeast",
-            text: "Income Category",
-            link: "/masterdata/income-category",
-          },
-        ],
-      },
+    // items: [
+    //   {
+    //     icon: "mdi-home-circle-outline",
+    //     "icon-alt": "mdi-home-circle",
+    //     text: "Dashboard",
+    //     // model: true,
+    //     link: "/",
+    //     policy: ["Leave Index"],
+    //   },
+    //   {
+    //     icon: "mdi-account-multiple-outline",
+    //     "icon-alt": "mdi-account-multiple-plus",
+    //     text: "Staffs",
+    //     link: "/staff",
+    //     policy: ["Staff Index"],
+    //   },
 
-      {
-        icon: "mdi-file-document-outline",
-        "icon-alt": "mdi-file-document",
-        text: "Reports",
-        policy: ["Report Index"],
-        children: [
-          {
-            icon: "mdi-file",
-            text: "Product",
-            link: "/product-report",
-            policy: ["Product Report Index"],
-          },
-          {
-            icon: "mdi-file-excel-box",
-            text: "Purchase",
-            link: "/purchase-report",
-            policy: ["Purchase Report Index"],
-          },
-          {
-            icon: "mdi-file-export",
-            text: "Purchase Order",
-            link: "/purchase-order-report",
-            policy: ["Purchase Order Report Index"],
-          },
-          {
-            icon: "mdi-file-export",
-            text: "Purchase Return",
-            link: "/purchase-return-report",
-            policy: ["Purchase Return Report Index"],
-          },
-          {
-            icon: "mdi-file-import",
-            text: "Out Of Stock",
-            link: "/out-of-stock-report",
-             policy: ["Out Of Stocks Report Index"],
-          },
-          {
-            icon: "mdi-file-send",
-            text: "Low Stock",
-            link: "/low-stock-report",
-            policy: ["Low Stocks Report Index"],
-          },
-          {
-            icon: "mdi-file-multiple",
-            text: "Sales",
-            link: "/sales-report",
-            policy: ["Sales Report Index"],
-          },
-        ],
-      },
-      {
-        icon: "mdi-wrench-outline",
-        "icon-alt": "mdi-wrench",
-        text: "Settings",
-        policy: ["setting"],
-        children: [
-          {
-            icon: "mdi-account-circle-outline",
-            text: "Users",
-            link: "/user",
-            policy: ["User Index"],
-          },
-          {
-            icon: "mdi-shield-lock",
-            text: "Roles",
-            link: "/role",
-            policy: ["Role Index"],
-          },
-          {
-            icon: "mdi-domain",
-            text: "Organization",
-            link: "/setting/organization",
-            policy: ["Organization Index"],
-          },
-          {
-            icon: "mdi-account-key",
-            text: "Pos Setting",
-            link: "/setting/pos",
-            policy: ["Pos setting Index"],
-          },
-          {
-            icon: "mdi-key-variant",
-            text: "Site Configuration",
-            link: "/setting/sites",
-            policy: ["Site setting Index"],
-          },
-        ],
-      },
-    ],
-    ListOfAdds: [
-      {
-        text: "Add Product",
-        icon: "mdi-layers-triple-outline",
-        link: "/product/add",
-        policy: ["Product Create"],
-      },
-      {
-        text: "Add Purchase Order",
-        icon: "mdi-storefront-outline",
-        link: "/purchase-order/add",
-        policy: ["Purchase Order Create"],
-      },
-      {
-        text: "Add Purchase",
-        icon: "mdi-truck-check-outline",
-        link: "/purchase/add",
-        policy: ["Purchase Create"],
-      },
-      {
-        text: "Add Purchase Return",
-        icon: "mdi-truck-delivery-outline",
-        link: "/purchase-return/add",
-        policy: ["Purchase Return Create"],
-      },
-      {
-        text: "Add Supplier",
-        icon: "mdi-account-multiple-outline",
-        link: "/supplier/add",
-        policy: ["Supplier Create"],
-      },
-      {
-        text: "Add Customer",
-        icon: "mdi-account-multiple-outline",
-        link: "/customer/add",
-        policy: ["Customer Create"],
-      },
-      // { text: "Add WareHouse", icon: "mdi-store", link: "/setting/warehouse" },
-      // { text: "Add Category", icon: "mdi-tag", link: "/setting/category" },
-    ],
-     ListOfReports: [
-      {
-        text: "Product",
-        icon: "mdi-layers-triple-outline",
-        link: "/product-report",
-        policy: ["Product Report Index"],
-      },
-      {
-        text: "Purchase Order",
-        icon: "mdi-storefront-outline",
-        link: "/purchase-order-report",
-        policy: ["PurchaseOrder Report Index"],
-      },
-      {
-        text: "Purchase",
-        icon: "mdi-truck-check-outline",
-        link: "/purchase-report",
-        policy: ["Purchase Report Index"],
-      },
-      {
-        text: "Purchase Return",
-        icon: "mdi-truck-delivery-outline",
-        link: "/purchase-return-report",
-        policy: ["PurchaseReturn Report Index"],
-      },
-      {
-        text: "Out Of Stock",
-        icon: "mdi-store",
-        "icon-alt": "mdi-store",
-        link: "/out-of-stock-report",
-        policy: ["Out Of Stocks Report Index"],
-      },
-      {
-        text: "Low Stock",
-        icon: "mdi-store",
-        "icon-alt": "mdi-store",
-        link: "/low-stock-report",
-        policy: ["Low Stocks Report Index"],
-      },
-      {
-        text: "Sales",
-        icon: "mdi-sack-percent",
-        "icon-alt": "mdi-account-multiple-plus",
-        link: "/sales-report",
-        policy: ["Sales Report Index"],
-      },
-    ],
+    //   {
+    //     icon: "mdi-calendar-multiple",
+    //     "icon-alt": "mdi-calendar-multiple",
+    //     text: "Leaves",
+    //     policy: ["Leave Index"],
+    //     children: [
+    //       {
+    //         icon: "mdi-calendar-plus",
+    //         text: "Request",
+    //         link: "/leave",
+    //         policy: ["Leave Index"],
+    //       },
+    //       {
+    //         icon: "mdi-calendar-multiple-check",
+    //         text: "Approvals",
+    //         link: "/staff_leave",
+    //         policy: ["Leave Index"],
+    //       },
+    //     ],
+    //   },
+
+    //   {
+    //     icon: "mdi-calendar-clock",
+    //     text: "Event",
+    //     link: "/event",
+    //     policy: ["Event Index"],
+    //   },
+    //   {
+    //     icon: "mdi-fingerprint",
+    //     text: "Attendance",
+    //     link: "/attendance",
+    //     policy: ["Event Index"],
+    //   },
+    //   {
+    //     icon: "mdi-cog-transfer",
+    //     text: "Master Data",
+    //     link: "/master-data",
+    //     policy: ["Salutation Index"],
+    //   },
+    //   {
+    //     icon: "mdi-wrench-outline",
+    //     "icon-alt": "mdi-wrench",
+    //     text: "Settings",
+    //     policy: ["User Index"],
+    //     children: [
+    //       {
+    //         icon: "mdi-account-circle-outline",
+    //         text: "Users",
+    //         link: "/user",
+    //         policy: ["User Index"],
+    //       },
+    //       {
+    //         icon: "mdi-shield-lock",
+    //         text: "Roles",
+    //         link: "/role",
+    //         policy: ["Role Index"],
+    //       },
+    //     ],
+    //   },
+    // ],
   }),
-  watch: {
-    // color_mode: function() {
-    //   this.$store.commit("SET_COLOR_MODE", this.color_mode);
+  watch: {},
+  methods: {
+    init() {
+      let permission = this.$store.state.user.policies;
+    },
+    async GetPhoto() {
+      await this.$msal
+        .msGraph({ url: "/me/photo/$value", responseType: "blob" })
+        .then(({ body }) => {
+          debugger
+          const avatar = (window.URL || window.webkitURL).createObjectURL(body);
+          this.$store.commit("user/SET_USERPHOTO", avatar);
+        });
+    },
+    GetLoginUser(email, token) {
+      this.$store.dispatch("user/Logins", { email, token }).then((res) => {
+        if (res.data && res.data.accessToken) {
+          this.$store.dispatch("user/LoginUsers").then((resp) => {
+            // this.$router.push("/");
+
+            this.loading = false;
+          });
+        } else {
+          this.$router.push("/notFound");
+        }
+      });
+    },
+    // checkPermission() {
+    //   this.items.map((item) => {
+    //     let permission = this.$store.state.user.policies;
+    //     var hasPermission = _.find(permission, function(permission) {
+    //       return permission.name == item.policy;
+    //     });
+
+    //     if (hasPermission) {
+    //       this.itemList.push(item);
+    //     }
+    //   });
     // },
   },
-  methods: {
-    gotopos() {
-      debugger;
-      window.open(this.$store.state.pos_url, "_blank");
-    },
-    GetBatchByBarcode(barcode) {
-      this.$store
-        .dispatch("product/GetProductBatchByBarcode", barcode)
-        .then((res) => {
-          debugger;
-
-          this.$router.push(`/product/${res.id}/batch/${res.batch_id}`);
-        })
-        .catch((err) => {
-          debugger;
-          this.barcodeErrorMessage = err.data;
-        });
-    },
-
-    checkPermission(policy) {
-      this.items.map((item) => {
-        let permission = this.$store.state.user.policies;
-        var hasPermission = _.find(permission, function (permission) {
-          return permission.name == item.policy;
-        });
-
-        if (hasPermission) {
-          this.itemList.push(item);
-        }
-      });
-
-      this.ListOfAdds.map((item) => {
-        let permission = this.$store.state.user.policies;
-        var hasPermissions = _.find(permission, function (permission) {
-          return permission.name == item.policy;
-        });
-        if (hasPermissions) {
-          this.productLists.push(item);
-        }
-      });
-
-      this.ListOfReports.map((item) => {
-        let permission = this.$store.state.user.policies;
-        var hasPermissions = _.find(permission, function (permission) {
-          return permission.name == item.policy;
-        });
-        if (hasPermissions) {
-          this.reportLists.push(item);
-        }
-      });
-    },
-  },
-  mounted: function () {
-    this.checkPermission();
-  },
   created() {
-    this.sitename = this.$store.state.sitesetting.name;
+    var login_status=this.$store.state.user.login_status
+    debugger
+    var counter = 0;
+    if(!login_status){
+      var intervalId = setInterval(() => {
+        var isAuthenticated=this.$msal.isAuthenticated()
+        if (this.$msal.isAuthenticated()) {
+          debugger
+            var token = this.$msal.data.accessToken;
+            var email = this.$msal.data.user.userName;
+            if (token && (token !== null)) {
+              this.GetLoginUser(email, token);
+              this.GetPhoto();
+              // this.checkPermission();
+              
+              clearInterval(intervalId);
+              
+              this.sitename = this.$store.state.sitesetting.name;
+    
+              this.$store.subscribe((mutation, state) => {
+                this.sitename = state.sitesetting.name;
+              });
+            }
+        }
+        else {
+          this.$router.push({ path: "/login" });
+        }
 
-
-
-    this.$store.subscribe((mutation, state) => {
-      this.sitename = state.sitesetting.name;
-    });
+        if(counter>=8){
+          this.$msal.signOut();
+          this.$router.push({ path: "/login" });
+        }
+        counter++;
+        console.log('Counter: ' ,counter)
+      }, 2000);
+    }
+    else{
+      // this.checkPermission();
+      this.GetPhoto();
+    }
   },
 
   computed: {
-    // sitename() {
-    //   return this.$store.state.sitesetting.name;
-    // },
     color_mode: {
       get() {
         return this.theme == "light";
@@ -865,13 +366,15 @@ export default {
         this.$store.commit("SET_COLOR_MODE", value);
       },
     },
-    isLoading: function () {
-      return this.$root.loading;
-    },
+    // isLoading: function() {
+    //   return !this.login_status;
+    // },
     ...mapState(["name", "theme"]),
-    ...mapState("user", ["user"]),
+    ...mapState("user", ["user", "login_status"]),
+    ...mapGetters("user", ["GetMenuList"]),
+
     permanent: {
-      get: function () {
+      get: function() {
         switch (this.$vuetify.breakpoint.name) {
           case "xs":
             return !true;
@@ -885,7 +388,7 @@ export default {
             return !false;
         }
       },
-      set: function (value) {
+      set: function(value) {
         this.drawer = value;
       },
     },
@@ -1043,15 +546,13 @@ input:checked + .slider:before {
   box-shadow: none;
 }
 .theme1 {
-  background-color: #1d927f!important;
+  background-color: #1d927f !important;
   border-radius: 24px !important;
   color: #ffffff !important;
 }
 .btn_responsive {
   max-width: -moz-available;
 }
-
-
 
 @media only screen and (max-width: 1400px) {
   .btn_responsive {

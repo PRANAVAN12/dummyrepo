@@ -46,7 +46,7 @@ export default {
   },
   /* ========================Incoming Category=========================*/
   async GetIncomeCategory({}, Id) {
-    debugger
+    
       return new Promise((resolve, reject) => {
           axios
               .get(`income-categories/${Id}`)
@@ -61,7 +61,7 @@ export default {
       });
   },
   async GetIncomeCategories({}) {
-    debugger
+    
     return new Promise((resolve, reject) => {
         axios
             .get(`income-categories`)
@@ -126,7 +126,7 @@ async EditIncomeCategory({}, credentials) {
         });
     }, 
     async GetExpenseCategory({}, Id) {
-      debugger
+      
         return new Promise((resolve, reject) => {
             axios
                 .get(`expense-categories/${Id}`)
@@ -141,7 +141,7 @@ async EditIncomeCategory({}, credentials) {
         });
     },
     async GetExpenseCategories({}) {
-        debugger
+        
         return new Promise((resolve, reject) => {
             axios
                 .get(`expense-categories`)

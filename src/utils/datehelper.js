@@ -1,23 +1,23 @@
 import moment from "moment";
 
 import store from "../store/store";
-// const dateformat = "DD-MMM-YYYY";
-// const timeformat = "DD-MMM-YYYY HH:mm:ss";
-// const monthyearformat = "MMMM YYYY";
-// const yearonlyformat = "YYYY";
+const dateformat = "DD-MMM-YYYY";
+const timeformat = "DD-MMM-YYYY HH:mm:ss";
+const monthyearformat = "MMMM YYYY";
+const yearonlyformat = "YYYY";
 
-const dateformat = store.state.sitesetting.date_format;
-const timeformat = store.state.timeformat;
-const monthyearformat = store.state.monthyearformat;
-const yearonlyformat = store.state.yearonlyformat;
+// const dateformat = store.state.sitesetting.date_format;
+// const timeformat = store.state.timeformat;
+// const monthyearformat = store.state.monthyearformat;
+// const yearonlyformat = store.state.yearonlyformat;
 
 export const formatDate = (date) => {
 
   if(date == null){
     return "..."
       }else{
-  var m = moment(new Date(date), store.state.sitesetting.date_format);
-  var formatted = m.locale("en").format(store.state.sitesetting.date_format);
+  var m = moment(new Date(date), dateformat);
+  var formatted = m.locale("en").format(dateformat);
   return formatted;
 }};
 

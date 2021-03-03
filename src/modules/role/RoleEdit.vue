@@ -207,10 +207,12 @@ export default {
       // let a= policies.filter(item=>item.model==Child.model)
     },
     loadRoledetails() {
+      
       let id = this.$route.params.id;
       let self = this;
       this.$store.dispatch("user/getroleById", id).then((item) => {
         this.role = new Role().initialise(item.data);
+        
         item.data.policies.map((data) => {
           let isValue = this.checkSingleGroupData.includes(data.model);
           if (isValue == false) {
@@ -264,6 +266,7 @@ export default {
     this.$store
       .dispatch("user/GetPolicies")
       .then((resp) => {
+        
         this.policies = resp.data;
       })
       .catch((err) => {

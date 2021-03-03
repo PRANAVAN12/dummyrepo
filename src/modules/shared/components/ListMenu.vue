@@ -106,6 +106,7 @@ export default {
       });
     },
     async archiveOrActive(item) {
+      
       await this.$store
         .dispatch("common/SoftDelete", { id: item.id, feature: this.feature })
         .then((res) => {

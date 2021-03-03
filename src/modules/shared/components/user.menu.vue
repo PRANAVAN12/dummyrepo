@@ -1,71 +1,35 @@
 <template>
-  <div class="text-center">
+  <div>
     <v-menu
-      v-if="user"
       v-model="menu"
       :close-on-content-click="false"
-      origin="center center"
-      :nudge-right="140"
-      :nudge-bottom="10"
-      transition="scale-transition"
+      :nudge-width="200"
       offset-y
     >
-      <template v-slot:activator="{ on, attrs }">
-        <v-avatar v-bind="attrs" v-on="on" size="32px" item color="primary">
-          <template v-if="user && user.image">
-            <img :src="user.image"
-          /></template>
-
-          <span v-else class="white--text subtitle-2 text-uppercase">{{
-            user.first_name.charAt(0) + user.last_name.charAt(0)
-          }}</span>
-        </v-avatar>
+      <template v-slot:activator="{ on }">
+        <v-list-item-avatar v-on="on" class="imgs">
+          <img :src="avatars" />
+        </v-list-item-avatar>
       </template>
-      <v-card class="pa-0">
+      <v-card>
+        <v-list-item>
+          <v-list-item-avatar>
+            <img :src="avatars" />
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>{{ this.username }}</v-list-item-title>
+            <v-list-item-subtitle>{{ this.jobTitle }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list>
-          <v-list-item class="justify-space-between">
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-bold">{{
-                user.first_name + " " + user.last_name
-              }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider></v-divider>
-
-          <v-list-item :to="'/user/' + user.id" class="justify-space-between">
-            <v-list-item-action>
-              <v-avatar color="cyan" size="30">
-                <v-icon>account_circle</v-icon>
-              </v-avatar>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Profile</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-
-          <v-list-item :to="'/changepassword' " class="justify-space-between">
-            <v-list-item-action>
-              <v-avatar color="green" size="30">
-                <v-icon>settings</v-icon>
-              </v-avatar>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Change Password</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider></v-divider>
-
-          <v-list-item class="justify-end">
-            <v-chip class="ma-2" color="primary" outlined>
-              <a @click="logout">Log out</a>
-              <v-icon right>
-                mdi-logout
-              </v-icon>
-            </v-chip>
-          </v-list-item>
+          <v-list-item>
+            <v-col></v-col>
+            <v-btn class="logout" color="primary" dark v-on:click="signOut"
+              >log out
+              <v-icon dark right>mdi-logout</v-icon>
+            </v-btn></v-list-item
+          >
         </v-list>
       </v-card>
     </v-menu>
@@ -75,26 +39,89 @@
 <script>
 import { mapState } from "vuex";
 export default {
+  props: ["man"],
   data: () => ({
     fav: true,
-    menu: false,
+    menu: "",
     message: false,
     hints: true,
     name: "",
     role: "",
+    avatars: "",
+    jobTitle: "",
+    loading: true,
   }),
-  created() {},
   computed: {
-    ...mapState("user", ["user"]),
+    username() {
+      return (this.msal && this.msal.user.name) || "Unknown";
+    },
+    email() {
+      return (this.msal && this.msal.user.userName) || null;
+    },
+    token() {
+      return (this.msal && this.msal.accessToken) || null;
+    },
+    // user() {
+    //   let user = null;
+    //   if (this.msal.isAuthenticated) {
+    //     // Note that the dollar sign ($) is missing from this.msal
+    //     user = {
+    //       ...this.msal.user,
+    //       profile: {},
+    //     };
+    //     if (this.msal.graph && this.msal.graph.profile) {
+    //       user.profile = this.msal.graph.profile;
+    //       console.log("User" + JSON.stringify(this.msal.graph));
+    //     }
+    //   }
+    //   return user;
+    // },
+    // ...mapState("user", ["user"]),
   },
   methods: {
-    logout() {
-      this.menu = false;
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      this.$store.dispatch("user/LogOut");
-      this.$router.push("/login");
+    signOut() {
+      localStorage.removeItem("accessToken");
+      localStorage.clear();
+      this.$msal.signOut();
     },
+    async fetchPhoto() {
+      await this.$msal
+        .msGraph({ url: "/me/photo/$value", responseType: "blob" })
+        .then(({ body }) => {
+          ;
+          const avatar = (window.URL || window.webkitURL).createObjectURL(body);
+          this.$store.commit("user/SET_USERPHOTO", avatar);
+          this.avatars = avatar;
+        })
+        .catch(() => {
+          // this.avatar = process.env.default_avatar
+        });
+    },
+    async fetchData() {
+      await this.$msal
+        .msGraph({ url: "/me" })
+        .then(({ body }) => {
+          this.jobTitle = body.jobTitle;
+        })
+        .catch(() => {
+          // this.avatar = process.env.default_avatar
+        });
+    },
+  },
+  created() {},
+  beforeMount() {
+    this.avatars = this.$store.state.user.avatar;
+    this.fetchPhoto();
+    //   this.fetchData();
   },
 };
 </script>
+
+<style scoped>
+.list-item-avatar .imgs {
+  padding: 10px;
+}
+.logout {
+  color: #96124c;
+}
+</style>

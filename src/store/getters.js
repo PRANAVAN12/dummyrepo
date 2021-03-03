@@ -26,6 +26,6 @@ const getters = {
       return [];
     }
   },
+  
 };
-
 export default getters;

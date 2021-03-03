@@ -155,7 +155,7 @@ export default {
     },
 
     async UploadImage(id) {
-      debugger;
+
       let formData = new FormData();
       if (this.selectedImages && this.imageUpdated) {
         formData.append("image", this.selectedImages);

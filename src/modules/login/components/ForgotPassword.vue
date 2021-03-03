@@ -166,13 +166,11 @@ export default {
         this.$store
           .dispatch("user/ForgetPassword", { email: this.form.username })
           .then((res) => {
-            debugger;
             this.succeed = true;
             this.messages.push(res.data.data);
             this.loading = false;
           })
           .catch((err) => {
-            debugger;
             this.messages.push(err.data);
             this.loading = false;
           });

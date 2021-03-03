@@ -1,10 +1,6 @@
 <template>
   <v-app>
     <div id="app">
-      <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div> -->
       <transition name="fade">
         <router-view :key="$route.path" />
       </transition>
@@ -17,31 +13,11 @@ import { mapState } from "vuex";
 import _ from "lodash";
 export default {
   computed: {
-    // ...mapState({
-    //   policies:state=>state.user.policies
-    // })
     loading: function() {
       return this.$root.loading;
     },
   },
-  watch: {
-    // '$route':function(){
-    //   this.checkPolicy()
-    // }
-  },
-  methods: {
-    // checkPolicy(){
-    //   let routerMetaPolicy=this.$route.meta.permission;
-    //   let hasPermission = _.find(this.$store.state.user.policies, function(policy) {
-    //     return policy.name == routerMetaPolicy;
-    //   });
-    //   if(this.$route.name != "Dashboard" && this.$route.name != "Setting"){
-    //     if(hasPermission === undefined) {
-    //       this.$router.push("/notFound");
-    //     }
-    //   }
-    // }
-  },
+
 };
 </script>
 

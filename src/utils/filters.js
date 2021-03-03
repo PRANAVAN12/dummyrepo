@@ -35,7 +35,7 @@ Vue.filter("formatCurrency", function (value) {
   } else {
     value = roundedValue;
   }
-  debugger
+  
   if (value) {
     value = reverseString(value);
     let modified = false;

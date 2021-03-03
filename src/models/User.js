@@ -1,51 +1,45 @@
-import { Contact } from "./Contact";
 import { Role } from "./Role";
-import { Address } from "./Address";
 export class User {
   constructor() {
-    this.username = "";
-    (this.lastname = ""), (this.firstname = ""), (this.company = "");
-    (this.address = new Address()), (this.contact = new Contact());
+    this.user = "";
     this.roles = "";
-    (this.email = ""), (this.Id = "");
+    this.staff_id = "";
+    (this.email = ""), 
+    (this.Id = "");
   }
 
   //get Api data and Deserialise the data
   initialise(initialiser) {
-    debugger
     const data = new User();
-    data.username = initialiser.username ? initialiser.username : "";
-    data.firstname = initialiser.first_name ? initialiser.first_name : "";
-    data.lastname = initialiser.last_name ? initialiser.last_name : "";
-    data.image = initialiser.image ? initialiser.image : "";
+    data.user = initialiser.user ? initialiser.user : "";
 
-    if (initialiser && initialiser.address) {
-      data.address = initialiser.address
-        ? new Address().initialise(initialiser.address)
-        : "";
-    } else {
-      data.address = new Address();
-    }
-    if (initialiser.contact) {
-      // const contacts=JSON.parse(initialiser.contacts)
-      data.contacts = new Contact().initialise(initialiser.contact);
-    } else {
-      data.contacts = new Contact();
-    }
     data.roles = [];
     if (initialiser.roles && initialiser.roles.length > 0) {
       data.roles = new Role().MapData(initialiser.roles);
     }
     data.email = initialiser.email ? initialiser.email : "";
-    console.log(
-      "------------------------------------------------------------------------"
-    );
-    console.log(data);
+    data.staff_id = initialiser.staff?initialiser.staff:"";
     return data;
   }
-  ToRequestModel(data) {
-    data.addresses.push(data.address);
-    data.contracts.push(data.contacts);
-    return data;
+
+  toUpdate(u){
+    const data = new Object();
+    data.id= u.id;
+    data.name= u.name ? u.name :"" ,
+    data.email= u.email ? u.email : "",
+    data.roles= u.roles ? u.roles : "",
+    data.staff_id= u.staff_id?u.staff_id:""
+    return data
+  }
+
+
+  toInitilaize(u){
+    const data = new Object();
+    data.id= u.id;
+    data.name=u.name ? u.name :"" ,
+    data.email= u.email ? u.email : "",
+    data.roles= u.roles ? u.roles[0].id : ""
+    data.staff_id= u.staff?u.staff.id:""
+    return data
   }
 }
